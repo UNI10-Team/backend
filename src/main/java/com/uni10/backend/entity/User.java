@@ -1,5 +1,6 @@
 package com.uni10.backend.entity;
 
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 import javax.persistence.*;
