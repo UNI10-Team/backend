@@ -7,7 +7,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 @RestController
 @RequestMapping("/")
-public class DefaultController {
+public class BaseController {
 
     @GetMapping("/")
     public RedirectView redirectToSwagger(){

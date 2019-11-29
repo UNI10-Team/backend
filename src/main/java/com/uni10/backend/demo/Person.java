@@ -2,18 +2,17 @@ package com.uni10.backend.demo;
 
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.util.Date;
 
 @Data
 @Entity
@@ -28,17 +27,22 @@ public class Person {
 
     private int age;
 
-    @ManyToOne(
-            fetch = FetchType.EAGER,
-            cascade = CascadeType.ALL,
-            optional = false
-    )
+    @Column(name = "father_id")
+    private long fatherId;
+
+    @Column(name = "mother_id")
+    private long motherId;
+
+    @ManyToOne
+    @JoinColumn(name = "mother_id", insertable = false, updatable = false)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Person mother;
 
-    @ManyToOne(
-            fetch = FetchType.EAGER,
-            cascade = CascadeType.ALL,
-            optional = false
-    )
+    @ManyToOne
+    @JoinColumn(name = "father_id", insertable = false, updatable = false)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Person father;
+
 }

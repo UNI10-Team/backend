@@ -1,13 +1,19 @@
 package com.uni10.backend.specifications;
 
+import lombok.experimental.UtilityClass;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.Collection;
 import java.util.List;
 
+@UtilityClass
 public class Specifications {
+
+    public static <T> Specification<T> and(Collection<Specification<T>> specifications){
+        return specifications.stream().reduce(conjunction(), Specification::and);
+    }
 
     public static <T, Y> Specification<T> equal(final String[] fullPath, final Y value){
         return (root, query, criteriaBuilder) -> criteriaBuilder.equal(navigate(root, fullPath), value);
@@ -37,16 +43,16 @@ public class Specifications {
         return (root, query, criteriaBuilder) -> criteriaBuilder.like(navigate(root, fullPath), "%" + value + "%");
     }
 
+    public static <T> Specification<T> in(final String[] fullPath, final List<String> values){
+        return (root, query, criteriaBuilder) -> navigate(root, fullPath).in(values);
+    }
+
     public static <T> Specification<T> conjunction(){
         return (root, query, criteriaBuilder) -> criteriaBuilder.conjunction();
     }
 
-    public static <T> Specification<T> in(final String[] fullPath, final List<String> value){
-        return (root, query, criteriaBuilder) -> navigate(root, fullPath).in(value);
-    }
-
-    public static <T> Specification<T> contains(final String[] fullPath, final String value){
-        return (root, query, criteriaBuilder) -> null;
+    public static <T> Specification<T> disjunction(){
+        return (root, query, criteriaBuilder) -> criteriaBuilder.disjunction();
     }
 
     private static  <Y, T> Path<Y> navigate(Root<T> root, String[] paths){

@@ -1,7 +1,8 @@
 package com.uni10.backend.demo;
 
-import lombok.val;
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
 public class PersonMapper {
 
     public static PersonDTO personDTO(final Person person) {
@@ -10,8 +11,8 @@ public class PersonMapper {
                 .id(person.getId())
                 .age(person.getAge())
                 .name(person.getName())
-                .mother_id(person.getMother().getId())
-                .father_id(person.getFather().getId())
+                .motherId(person.getMotherId())
+                .fatherId(person.getFatherId())
                 .build();
     }
 
@@ -20,6 +21,8 @@ public class PersonMapper {
         person.setId(personDTO.getId());
         person.setAge(personDTO.getAge());
         person.setName(personDTO.getName());
+        person.setMotherId(personDTO.getMotherId());
+        person.setMotherId(personDTO.getFatherId());
         return person;
     }
 }
