@@ -47,14 +47,14 @@ public class PersonController {
 
     @PostMapping
     @ApiOperation(value = "PersonController.save", notes = "Save a new person")
-    public PersonDTO save(@Valid @RequestBody PersonDTO personDTO) {
-        return personService.save(personDTO);
+    public ResponseEntity<PersonDTO> save(@Valid @RequestBody PersonDTO personDTO) {
+        return ResponseEntity.ok(personService.save(personDTO));
     }
 
     @PutMapping("/{id}")
-    @ApiOperation(value = "PersonController.save", notes = "Update an existent person")
-    public PersonDTO update(@Valid @RequestBody PersonDTO personDTO, @PathVariable long id) {
-        return personService.update(personDTO, id);
+    @ApiOperation(value = "PersonController.update", notes = "Update an existent person")
+    public ResponseEntity<PersonDTO> update(@Valid @RequestBody PersonDTO personDTO, @PathVariable long id) {
+        return ResponseEntity.ok(personService.update(personDTO, id));
     }
 
     @DeleteMapping("/{id}")
