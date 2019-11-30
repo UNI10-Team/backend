@@ -1,4 +1,4 @@
-package com.uni10.backend.api;
+package com.uni10.backend.api.requests;
 
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.Example;

@@ -1,7 +1,6 @@
 package com.uni10.backend.demo;
 
 
-import com.uni10.backend.api.PagedRequest;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
@@ -54,7 +53,13 @@ public class PersonController {
     @PutMapping("/{id}")
     @ApiOperation(value = "PersonController.update", notes = "Update an existent person")
     public ResponseEntity<PersonDTO> update(@Valid @RequestBody PersonDTO personDTO, @PathVariable long id) {
-        return ResponseEntity.ok(personService.update(personDTO, id));
+        val optional = personService.update(personDTO, id);
+        if(optional.isPresent()){
+            return ResponseEntity.ok(optional.get());
+        }
+        else{
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/{id}")

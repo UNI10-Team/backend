@@ -1,18 +1,13 @@
 package com.uni10.backend.service;
 
-import com.uni10.backend.api.I18NTranslationDTO;
-import com.uni10.backend.api.I18NTranslationRequest;
+import com.uni10.backend.api.dto.I18NTranslationDTO;
+import com.uni10.backend.api.requests.I18NTranslationRequest;
 import com.uni10.backend.entity.I18NTranslation;
 import com.uni10.backend.repository.I18NTranslationRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.stream.Collectors;
 

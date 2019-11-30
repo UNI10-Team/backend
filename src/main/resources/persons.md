@@ -3,7 +3,7 @@ Filtrare si sortare
 
 Exemplu URL: 
 
-http://localhost:8080/persons?sort=age$DESC&sort=name$ASC&size=3&page=0&age=lt=1900&father_age=ge=27
+http://localhost:8080/persons?sort=age$DESC&sort=name$ASC&size=3&page=0&age=lt=1900
 
 Pare complicat, dar hai sa il spargem in bucati:
 
@@ -21,16 +21,14 @@ page=0 => indexul paginii, incepe de la 0
 
 _age_=__lt=1900__ => age less than 1900 aka varsta mai mica de 1900
 
-_father_age_=__ge=27__ => father.age >= 27 aka varsta de la father mai mare de 27
-
 Mai jos sunt toti "operatorii":
 
 |Operator | Key|
 |:-------:|:--:|
-|==|        eq|
-|!=|ne|
-|=<| le|
-|<| lt|
-|=>| ge|
-|>| gt|
-|like| lk|
+|==       |  eq|
+|!=       |  ne|
+|=<       |  le|
+|<        |  lt|
+|=>       |  ge|
+|>        |  gt|
+|like     |  lk|

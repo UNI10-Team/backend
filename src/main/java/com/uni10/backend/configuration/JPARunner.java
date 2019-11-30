@@ -4,12 +4,9 @@ import com.uni10.backend.entity.Role;
 import com.uni10.backend.entity.User;
 import com.uni10.backend.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
-
-import static com.amazonaws.util.AWSRequestMetrics.Field.Exception;
 
 @Component
 @AllArgsConstructor
@@ -19,7 +16,7 @@ public class JPARunner implements CommandLineRunner {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         User user = new User();
         user.setUsername("uni10");
         user.setPassword("password");

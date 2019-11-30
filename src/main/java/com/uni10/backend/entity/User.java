@@ -26,4 +26,9 @@ public class User {
     @Column(nullable = false)
     private Role role;
 
+    @Column()
+    private String firstName;
+
+    @Column()
+    private String lastName;
 }

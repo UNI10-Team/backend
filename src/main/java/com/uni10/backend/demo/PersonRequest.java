@@ -1,7 +1,7 @@
 package com.uni10.backend.demo;
 
 import com.uni10.backend.api.filter.Filter;
-import com.uni10.backend.api.PagedRequest;
+import com.uni10.backend.api.requests.PagedRequest;
 import com.uni10.backend.specifications.Specifications;
 import io.swagger.annotations.ApiParam;
 import lombok.Getter;

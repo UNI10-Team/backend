@@ -1,4 +1,4 @@
-package com.uni10.backend.api;
+package com.uni10.backend.api.requests;
 
 import com.uni10.backend.api.filter.Filter;
 import com.uni10.backend.entity.I18NTranslation;
@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 
 @Getter
 public class I18NTranslationRequest implements Filter<I18NTranslation> {
