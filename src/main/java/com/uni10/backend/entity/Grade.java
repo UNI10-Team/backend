@@ -7,9 +7,9 @@ import javax.persistence.*;
 @Data
 @Entity
 @Table(name = "grades", catalog = "courses")
-public class Grades {
+public class Grade {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
     private long id;
 }

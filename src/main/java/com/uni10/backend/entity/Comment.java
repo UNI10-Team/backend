@@ -9,9 +9,9 @@ import javax.persistence.*;
 @Entity
 @Table(name = "comments", catalog = "courses")
 public class Comment {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
     private long id;
 
     @Column(name = "text")
@@ -19,6 +19,10 @@ public class Comment {
 
     @Column(name = "user_id")
     private long userId;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    private User user;
 
     @Column(name = "attachment_id", nullable = false)
     private long attachmentId;

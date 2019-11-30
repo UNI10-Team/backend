@@ -9,9 +9,9 @@ import java.util.Set;
 @Entity
 @Table(name = "courses", catalog = "courses")
 public class Course {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
     private long id;
 
     @Column(name = "type")
