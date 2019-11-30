@@ -1,13 +1,12 @@
 package com.uni10.backend.entity;
 
-import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name ="users")
+@Table(name = "users")
 public class User {
 
     @Id
@@ -26,4 +25,5 @@ public class User {
     @Enumerated
     @Column(nullable = false)
     private Role role;
+
 }
