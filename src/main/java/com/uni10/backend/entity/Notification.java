@@ -8,6 +8,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "notifications", catalog = "courses")
 public class Notification {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -15,7 +16,7 @@ public class Notification {
     @Column(name = "text")
     private String text;
 
-    @Column(name = "user_id", nullable = false)
+    @Column(name = "user_id")
     private long userId;
 
 }

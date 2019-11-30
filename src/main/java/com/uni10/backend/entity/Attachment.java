@@ -1,6 +1,8 @@
 package com.uni10.backend.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -25,14 +27,18 @@ public class Attachment {
     @Column(name = "type")
     private String type;
 
-    @Column(name = "course_id", nullable = false)
+    @Column(name = "course_id")
     private long courseId;
 
     @ManyToOne
     @JoinColumn(name = "course_id", insertable = false, updatable = false)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private Course course;
 
-    @OneToMany(mappedBy = "attachment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "attachment", fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private Set<Comment> comments = new HashSet<>();
 
 }

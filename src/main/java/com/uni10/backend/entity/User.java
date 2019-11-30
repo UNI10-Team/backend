@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name = "users")
+@Table(name = "users", catalog = "users")
 public class User {
 
     @Id
@@ -26,9 +26,9 @@ public class User {
     @Column(nullable = false)
     private Role role;
 
-    @Column()
+    @Column(nullable = false)
     private String firstName;
 
-    @Column()
+    @Column(nullable = false)
     private String lastName;
 }

@@ -4,15 +4,28 @@ import io.swagger.annotations.ApiModel;
 
 import java.sql.Time;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 
-@Getter
-@Builder
 @ApiModel
+@Builder
+@Getter
+@ToString
+@EqualsAndHashCode
 public class ScheduleDTO {
-    private long courseId;
+
+    private long id;
+
     private String day;
+
     private Time fromTime;
+
     private Time toTime;
+
     private String room;
+
+    private long teacherId;
+
+    private long courseId;
 }

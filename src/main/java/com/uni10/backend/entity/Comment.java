@@ -2,6 +2,8 @@ package com.uni10.backend.entity;
 
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 
@@ -17,19 +19,22 @@ public class Comment {
     @Column(name = "text")
     private String text;
 
-    @Column(name = "user_id")
-    private long userId;
+    @Column(name = "student_id")
+    private long teacherId;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", insertable = false, updatable = false)
-    private User user;
+    @JoinColumn(name = "teacher_id", insertable = false, updatable = false)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private User teacher;
 
-    @Column(name = "attachment_id", nullable = false)
+    @Column(name = "attachment_id")
     private long attachmentId;
 
     @ManyToOne
     @JoinColumn(name = "attachment_id", insertable = false, updatable = false)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private Attachment attachment;
-
 
 }

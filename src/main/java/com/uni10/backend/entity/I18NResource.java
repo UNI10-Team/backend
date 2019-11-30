@@ -24,8 +24,8 @@ public class I18NResource {
             mappedBy = "resource",
             cascade = CascadeType.ALL,
             fetch = FetchType.LAZY)
-    @EqualsAndHashCode.Exclude
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Set<I18NTranslation> translations = new HashSet<>();
 
 }

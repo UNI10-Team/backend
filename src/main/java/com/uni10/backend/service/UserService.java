@@ -46,9 +46,8 @@ public class UserService {
         }
     }
 
-    public Optional<UserDTO> getCurrentUser(){
-        return securityService.getCurrentUsername().map(UserService::userDTO);
-
+    public UserDTO getCurrentUser(){
+        return userDTO(securityService.getCurrentUser());
     }
 
     private static UserDTO userDTO(final User user){

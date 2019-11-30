@@ -1,8 +1,11 @@
 package com.uni10.backend.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -17,16 +20,22 @@ public class Course {
     @Column(name = "type")
     private String type;
 
-    @Column(name = "subject_id", nullable = false)
+    @Column(name = "subject_id")
     private long subjectId;
 
     @ManyToOne
     @JoinColumn(name = "subject_id", insertable = false, updatable = false)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private Subject subject;
 
     @OneToMany(mappedBy = "course")
-    private Set<Schedule> schedules;
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private Set<Schedule> schedules = new HashSet<>();
 
     @OneToMany(mappedBy = "course")
-    private Set<Attachment> attachments;
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private Set<Attachment> attachments = new HashSet<>();
 }

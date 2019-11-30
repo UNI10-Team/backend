@@ -2,13 +2,15 @@ package com.uni10.backend.api.dto;
 
 import io.swagger.annotations.ApiModel;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 
-import java.util.Set;
-
-@Getter
-@Builder
 @ApiModel
+@Builder
+@Getter
+@ToString
+@EqualsAndHashCode
 public class AttachmentDTO {
 
     private long id;
@@ -21,5 +23,4 @@ public class AttachmentDTO {
 
     private long courseId;
 
-    private Set<CommentDTO> comments;
 }

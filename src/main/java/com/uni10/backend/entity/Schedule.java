@@ -1,6 +1,8 @@
 package com.uni10.backend.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.sql.Time;
@@ -28,21 +30,27 @@ public class Schedule {
     @Column(name = "room")
     private String room;
 
-    @Column(name = "teacher_id", nullable = false)
+    @Column(name = "teacher_id")
     private long teacherId;
 
     @ManyToOne
     @JoinColumn(name = "teacher_id", insertable = false, updatable = false)
-    private User teacher;
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private User user;
 
-    @Column(name = "course_id", nullable = false)
+    @Column(name = "course_id")
     private long courseId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course_id", insertable = false, updatable = false)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private Course course;
 
-    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "schedule", fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private Set<Attendance> attendances = new HashSet<>();
 
 }

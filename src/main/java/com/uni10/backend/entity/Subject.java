@@ -1,24 +1,34 @@
 package com.uni10.backend.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
 @Entity
 @Table(name = "subjects", catalog = "courses")
 public class Subject {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(name = "name")
-    private String firstName;
+    private String name;
 
-    @Column(name = "user_id", nullable = false)
-    private long userId;
+    @Column(name = "teacher_id")
+    private long teacherId;
 
-    @OneToMany(mappedBy = "subject")
-    private Set<Course> courses;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "teacher_id", insertable = false, updatable = false)
+    private User teacher;
+
+    @OneToMany(mappedBy = "subject", fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private Set<Course> courses = new HashSet<>();
 }

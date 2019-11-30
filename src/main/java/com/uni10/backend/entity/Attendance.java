@@ -1,6 +1,8 @@
 package com.uni10.backend.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 
@@ -13,17 +15,21 @@ public class Attendance {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "user_id", nullable = false)
-    private long userId;
+    @Column(name = "student_id")
+    private long studentId;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", insertable = false, updatable = false)
-    private User user;
+    @JoinColumn(name = "student_id", insertable = false, updatable = false)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private User student;
 
-    @Column(name = "schedule_id", nullable = false)
+    @Column(name = "schedule_id")
     private long scheduleId;
 
     @ManyToOne
     @JoinColumn(name = "schedule_id", insertable = false, updatable = false)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private Schedule schedule;
 }

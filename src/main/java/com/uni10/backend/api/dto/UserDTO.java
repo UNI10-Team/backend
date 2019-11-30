@@ -7,12 +7,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
-import javax.persistence.Column;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
 @ApiModel
 @Builder
 @Getter
@@ -21,10 +15,16 @@ import javax.persistence.Id;
 public class UserDTO {
 
     private long id;
+
     private String username;
+
     private String email;
+
     private String password;
+
     private Role role;
+
     private String firstName;
+
     private String lastName;
 }

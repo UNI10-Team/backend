@@ -36,10 +36,24 @@ public class PersonController {
     @ApiOperation(value = "PersonController.findById", notes = "Find one Person by id")
     public ResponseEntity<PersonDTO> findById(@PathVariable long id) {
         val optional = personService.findById(id);
-        if(optional.isPresent()){
+        if (optional.isPresent()) {
             return ResponseEntity.ok(optional.get());
+        } else {
+            return ResponseEntity.notFound().build();
         }
-        else{
+    }
+
+    @GetMapping("/{personId}/mother")
+    public ResponseEntity<PersonDTO> findMother(final MotherRequest motherRequest) {
+        val optional = personService.findById(motherRequest.getPersonId());
+        if (optional.isPresent()) {
+            val mother = personService.findById(optional.get().getMotherId());
+            if (mother.isPresent()) {
+                return ResponseEntity.ok(mother.get());
+            } else {
+                return ResponseEntity.noContent().build();
+            }
+        } else {
             return ResponseEntity.notFound().build();
         }
     }
@@ -54,10 +68,9 @@ public class PersonController {
     @ApiOperation(value = "PersonController.update", notes = "Update an existent person")
     public ResponseEntity<PersonDTO> update(@Valid @RequestBody PersonDTO personDTO, @PathVariable long id) {
         val optional = personService.update(personDTO, id);
-        if(optional.isPresent()){
+        if (optional.isPresent()) {
             return ResponseEntity.ok(optional.get());
-        }
-        else{
+        } else {
             return ResponseEntity.notFound().build();
         }
     }

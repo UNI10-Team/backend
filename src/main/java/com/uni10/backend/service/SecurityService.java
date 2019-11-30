@@ -29,7 +29,7 @@ public class SecurityService implements UserDetailsService {
         return new UserInfo(optional.get());
     }
 
-    public Optional<User> getCurrentUsername(){
+    public User getCurrentUser(){
         UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext()
                 .getAuthentication().getPrincipal();
         return userRepository.findByUsername(userInfo.getUsername());
