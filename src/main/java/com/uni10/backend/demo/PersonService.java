@@ -63,7 +63,7 @@ public class PersonService {
         person.setAge(personDTO.getAge());
         person.setName(personDTO.getName());
         person.setMotherId(personDTO.getMotherId());
-        person.setMotherId(personDTO.getFatherId());
+        person.setFatherId(personDTO.getFatherId());
         return person;
     }
 }

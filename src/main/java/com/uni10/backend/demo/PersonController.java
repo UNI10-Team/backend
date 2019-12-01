@@ -44,8 +44,8 @@ public class PersonController {
     }
 
     @GetMapping("/{personId}/mother")
-    public ResponseEntity<PersonDTO> findMother(final MotherRequest motherRequest) {
-        val optional = personService.findById(motherRequest.getPersonId());
+    public ResponseEntity<PersonDTO> findMother(@PathVariable(name = "personId") long personId) {
+        val optional = personService.findById(personId);
         if (optional.isPresent()) {
             val mother = personService.findById(optional.get().getMotherId());
             if (mother.isPresent()) {

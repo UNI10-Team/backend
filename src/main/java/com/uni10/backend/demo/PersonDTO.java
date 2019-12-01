@@ -21,5 +21,6 @@ public class PersonDTO {
     private int age;
 
     private long motherId;
+
     private long fatherId;
 }

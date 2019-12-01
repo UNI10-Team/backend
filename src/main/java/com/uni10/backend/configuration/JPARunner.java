@@ -19,6 +19,8 @@ public class JPARunner implements CommandLineRunner {
     public void run(String... args) {
         User user = new User();
         user.setUsername("uni10");
+        user.setFirstName("UNI10");
+        user.setLastName("ADMIN");
         user.setPassword("password");
         user.setEmail(user.getUsername() + "@scs.ubbcluj.ro");
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
