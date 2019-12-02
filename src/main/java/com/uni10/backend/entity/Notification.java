@@ -3,6 +3,7 @@ package com.uni10.backend.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -18,5 +19,9 @@ public class Notification {
 
     @Column(name = "user_id")
     private long userId;
+
+    private boolean opened;
+
+    private LocalDateTime created;
 
 }

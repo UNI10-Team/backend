@@ -6,6 +6,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
+
 @ApiModel
 @Builder
 @Getter
@@ -18,5 +20,9 @@ public class NotificationDTO {
     private String text;
 
     private long userId;
+
+    private boolean opened;
+
+    private LocalDateTime created;
 
 }
