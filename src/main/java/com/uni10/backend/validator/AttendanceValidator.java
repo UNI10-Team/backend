@@ -31,7 +31,7 @@ public class AttendanceValidator implements ConstraintValidator<AttendanceValid,
                     .addConstraintViolation();
         }
 
-        if(!scheduleRepository.existsById(value.getScheduletId())){
+        if(!scheduleRepository.existsById(value.getScheduleId())){
             isValid = false;
             context.buildConstraintViolationWithTemplate("Schedule should be real")
                     .addPropertyNode("scheduleId")

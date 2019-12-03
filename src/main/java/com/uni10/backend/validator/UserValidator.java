@@ -14,7 +14,7 @@ import javax.validation.ConstraintValidatorContext;
 public class UserValidator implements ConstraintValidator<UserValid, UserDTO> {
 
     @Override
-    public boolean isValid(CourseDTO value, ConstraintValidatorContext context) {
+    public boolean isValid(UserDTO value, ConstraintValidatorContext context) {
 
         boolean isValid = true;
 

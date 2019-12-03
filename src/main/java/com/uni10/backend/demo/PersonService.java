@@ -25,17 +25,15 @@ public class PersonService {
     }
 
     public PersonDTO save(final PersonDTO dto) {
-        Person person = person(dto);
-        person.setId(0);
+        Person person = person(dto, 0);
         person = personRepository.save(person);
         return personDTO(person);
     }
 
     public Optional<PersonDTO> update(final PersonDTO dto, final long id) {
         if (personRepository.existsById(id)) {
-            Person person = person(dto);
-            person.setId(id);
-            personRepository.save(person);
+            Person person = person(dto, id);
+            person = personRepository.save(person);
             return Optional.of(personDTO(person));
         } else {
             return Optional.empty();
@@ -57,13 +55,14 @@ public class PersonService {
                 .build();
     }
 
-    private static Person person(final PersonDTO personDTO) {
-        final Person person = new Person();
-        person.setId(personDTO.getId());
-        person.setAge(personDTO.getAge());
-        person.setName(personDTO.getName());
-        person.setMotherId(personDTO.getMotherId());
-        person.setFatherId(personDTO.getFatherId());
-        return person;
+    private static Person person(final PersonDTO personDTO, final long id) {
+        return Person
+                .builder()
+                .id(id)
+                .age(personDTO.getAge())
+                .name(personDTO.getName())
+                .motherId(personDTO.getMotherId())
+                .fatherId(personDTO.getFatherId())
+                .build();
     }
 }

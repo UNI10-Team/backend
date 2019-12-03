@@ -22,7 +22,7 @@ public class SubjectValidator implements ConstraintValidator<SubjectValid, Subje
 
         context.disableDefaultConstraintViolation();
 
-        if(value.getName() == null || value.getname().equals("")){
+        if(value.getName() == null || value.getName().equals("")){
             isValid = false;
             context.buildConstraintViolationWithTemplate("Name should not be empty")
                     .addPropertyNode("name")

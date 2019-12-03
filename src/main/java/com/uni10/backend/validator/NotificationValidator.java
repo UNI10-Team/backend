@@ -29,13 +29,6 @@ public class NotificationValidator implements ConstraintValidator<NotificationVa
                     .addConstraintViolation();
         }
 
-        if(value.getOpened() != true && value.getOpened() != false){
-            isValid = false;
-            context.buildConstraintViolationWithTemplate("Opened should be true or false")
-                    .addPropertyNode("opened")
-                    .addConstraintViolation();
-        }
-
         if(!userRepository.existsById(value.getUserId())){
             isValid = false;
             context.buildConstraintViolationWithTemplate("User should be real")

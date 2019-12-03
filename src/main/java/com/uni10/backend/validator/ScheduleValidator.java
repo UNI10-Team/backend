@@ -30,13 +30,13 @@ public class ScheduleValidator implements ConstraintValidator<ScheduleValid, Sch
                     .addPropertyNode("day")
                     .addConstraintViolation();
         }
-        if(value.getFromTime() == null || value.getFromTime().equals("")){
+        if(value.getFromTime() == null){
             isValid = false;
             context.buildConstraintViolationWithTemplate("Fromtime should not be empty")
                     .addPropertyNode("fromTime")
                     .addConstraintViolation();
         }
-        if(value.getToTime() == null || value.getToTime().equals("")){
+        if(value.getToTime() == null){
             isValid = false;
             context.buildConstraintViolationWithTemplate("ToTime should not be empty")
                     .addPropertyNode("toTime")
