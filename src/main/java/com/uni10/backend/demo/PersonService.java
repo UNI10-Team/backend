@@ -45,24 +45,20 @@ public class PersonService {
     }
 
     private static PersonDTO personDTO(final Person person) {
-        return PersonDTO
-                .builder()
-                .id(person.getId())
-                .age(person.getAge())
-                .name(person.getName())
-                .motherId(person.getMotherId())
-                .fatherId(person.getFatherId())
-                .build();
+        return new PersonDTO()
+                .setId(person.getId())
+                .setAge(person.getAge())
+                .setName(person.getName())
+                .setMotherId(person.getMotherId())
+                .setFatherId(person.getFatherId());
     }
 
     private static Person person(final PersonDTO personDTO, final long id) {
-        return Person
-                .builder()
-                .id(id)
-                .age(personDTO.getAge())
-                .name(personDTO.getName())
-                .motherId(personDTO.getMotherId())
-                .fatherId(personDTO.getFatherId())
-                .build();
+        return new Person()
+                .setId(id)
+                .setAge(personDTO.getAge())
+                .setName(personDTO.getName())
+                .setMotherId(personDTO.getMotherId())
+                .setFatherId(personDTO.getFatherId());
     }
 }

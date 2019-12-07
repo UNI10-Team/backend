@@ -2,10 +2,12 @@ package com.uni10.backend.demo;
 
 
 import lombok.Builder;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,10 +18,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-@Builder
-@Getter
-@ToString
-@EqualsAndHashCode
+@Data
+@Accessors(chain = true)
 @Entity
 @Table(name = "persons", catalog = "demo")
 public class Person {

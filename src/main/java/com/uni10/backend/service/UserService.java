@@ -46,36 +46,33 @@ public class UserService {
         }
     }
 
-    public UserDTO getCurrentUser(){
+    public UserDTO getCurrentUser() {
         return userDTO(securityService.getCurrentUser());
     }
 
-    private static UserDTO userDTO(final User user){
-        return UserDTO
-                .builder()
-                .id(user.getId())
-                .username(user.getUsername())
-                .email(user.getEmail())
-                .role(user.getRole())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .build();
+    private static UserDTO userDTO(final User user) {
+        return new UserDTO()
+                .setId(user.getId())
+                .setUsername(user.getUsername())
+                .setEmail(user.getEmail())
+                .setRole(user.getRole())
+                .setFirstName(user.getFirstName())
+                .setLastName(user.getLastName());
     }
 
-    private static User user(final UserDTO userDTO){
-        User user = new User();
-        user.setId(userDTO.getId());
-        user.setUsername(userDTO.getUsername());
-        user.setEmail(userDTO.getEmail());
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        user.setRole(userDTO.getRole());
-        user.setFirstName(userDTO.getFirstName());
-        user.setLastName(userDTO.getLastName());
-        return user;
+    private static User user(final UserDTO userDTO) {
+        return new User()
+                .setId(userDTO.getId())
+                .setUsername(userDTO.getUsername())
+                .setEmail(userDTO.getEmail())
+                .setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()))
+                .setRole(userDTO.getRole())
+                .setFirstName(userDTO.getFirstName())
+                .setLastName(userDTO.getLastName());
     }
 
     @Autowired
-    private void setBCryptPasswordEncoder(final BCryptPasswordEncoder bCryptPasswordEncoder){
+    private void setBCryptPasswordEncoder(final BCryptPasswordEncoder bCryptPasswordEncoder) {
         UserService.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 }

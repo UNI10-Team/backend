@@ -1,16 +1,12 @@
 package com.uni10.backend.api.dto;
 
 import io.swagger.annotations.ApiModel;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.Data;
+import lombok.experimental.Accessors;
 
 @ApiModel
-@Builder
-@Getter
-@ToString
-@EqualsAndHashCode
+@Data
+@Accessors(chain = true)
 public class SubjectDTO {
 
     private long id;

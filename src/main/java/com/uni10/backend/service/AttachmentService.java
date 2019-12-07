@@ -30,24 +30,20 @@ public class AttachmentService {
     }
 
     private static AttachmentDTO attachmentDTO(final Attachment attachment){
-        return AttachmentDTO
-                .builder()
-                .id(attachment.getId())
-                .data(new String(attachment.getData()))
-                .name(attachment.getName())
-                .type(attachment.getType())
-                .courseId(attachment.getCourseId())
-                .build();
+        return new AttachmentDTO()
+                .setId(attachment.id())
+                .setData(new String(attachment.data()))
+                .setName(attachment.name())
+                .setType(attachment.type())
+                .setCourseId(attachment.courseId());
     }
 
     private static Attachment attachment(final AttachmentDTO attachmentDTO, final long id){
-        return Attachment
-                .builder()
+        return new Attachment()
                 .id(id)
                 .data(attachmentDTO.getData().getBytes())
                 .name(attachmentDTO.getName())
                 .type(attachmentDTO.getType())
-                .courseId(attachmentDTO.getCourseId())
-                .build();
+                .courseId(attachmentDTO.getCourseId());
     }
 }

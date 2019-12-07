@@ -27,11 +27,9 @@ public class I18NTranslationService {
     }
 
     private static I18NTranslationDTO toI18NTranslationDTO(final I18NTranslation i18NTranslation){
-        return I18NTranslationDTO
-                .builder()
-                .translation(i18NTranslation.getTranslation())
-                .language(i18NTranslation.getLanguage())
-                .key(i18NTranslation.getResource().getName())
-                .build();
+        return new I18NTranslationDTO()
+                .setTranslation(i18NTranslation.getTranslation())
+                .setLanguage(i18NTranslation.getLanguage())
+                .setKey(i18NTranslation.getResource().getName());
     }
 }

@@ -1,10 +1,12 @@
 package com.uni10.backend.entity;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 
 @Data
+@Accessors(chain = true)
 @Entity
 @Table(name = "users", catalog = "users")
 public class User {

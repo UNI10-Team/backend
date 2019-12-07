@@ -18,7 +18,7 @@ public class PagedRequest {
     @ApiParam(name = "size", defaultValue = "20")
     private int size = 20;
 
-    @ApiParam(name = "sort", allowableValues = "[name$ASC,name$DESC,name]")
+    @ApiParam(name = "sort", example = "[name$ASC,name$DESC,name]")
     private List<String> sort = new ArrayList<>();
 
     public Pageable toPageable(){

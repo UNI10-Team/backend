@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.val;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,6 +44,7 @@ public class PersonController {
         }
     }
 
+    @Secured("ROLE_ADMIN")
     @GetMapping("/{personId}/mother")
     public ResponseEntity<PersonDTO> findMother(@PathVariable(name = "personId") long personId) {
         val optional = personService.findById(personId);

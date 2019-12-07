@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,13 +19,13 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.awt.event.ActionListener;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-@Builder
-@Getter
-@ToString
-@EqualsAndHashCode
+@Data
+@Accessors(fluent = true)
 @Entity
 @Table(name = "attachments", catalog = "courses")
 public class Attachment {

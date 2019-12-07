@@ -28,6 +28,8 @@ public class AttachmentController {
 
     @GetMapping
     public Page<Attachment> findAll(final AttachmentRequest attachmentRequest) {
+        System.out.println(attachmentRequest.getDate());
+        System.out.println(attachmentRequest.getTime());
         return attachmentService.findAll(attachmentRequest);
     }
 
