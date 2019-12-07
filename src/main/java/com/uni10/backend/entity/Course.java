@@ -3,6 +3,7 @@ package com.uni10.backend.entity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -10,6 +11,7 @@ import java.util.Set;
 
 @Data
 @Entity
+@Accessors(chain = true)
 @Table(name = "courses", catalog = "courses")
 public class Course {
 
