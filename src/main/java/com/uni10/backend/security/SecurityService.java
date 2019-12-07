@@ -1,6 +1,7 @@
 package com.uni10.backend.security;
 
 
+import com.uni10.backend.api.requests.RegistrationRequest;
 import com.uni10.backend.entity.User;
 import com.uni10.backend.repository.UserRepository;
 import com.uni10.backend.service.UserInfo;
@@ -34,5 +35,9 @@ public class SecurityService implements UserDetailsService {
         UserInfo userInfo = (UserInfo) SecurityContextHolder.getContext()
                 .getAuthentication().getPrincipal();
         return userRepository.findByUsername(userInfo.getUsername());
+    }
+
+    public void registerUser(RegistrationRequest registrationRequest){
+
     }
 }
