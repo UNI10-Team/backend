@@ -19,14 +19,14 @@ public class Comment {
     @Column(name = "text")
     private String text;
 
-    @Column(name = "student_id")
-    private long teacherId;
+    @Column(name = "user_id")
+    private long userId;
 
     @ManyToOne
-    @JoinColumn(name = "teacher_id", insertable = false, updatable = false)
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    private User teacher;
+    private User user;
 
     @Column(name = "attachment_id")
     private long attachmentId;
