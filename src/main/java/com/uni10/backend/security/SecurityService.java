@@ -1,8 +1,9 @@
-package com.uni10.backend.service;
+package com.uni10.backend.security;
 
 
 import com.uni10.backend.entity.User;
 import com.uni10.backend.repository.UserRepository;
+import com.uni10.backend.service.UserInfo;
 import lombok.AllArgsConstructor;
 import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
