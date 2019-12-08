@@ -3,6 +3,7 @@ package com.uni10.backend.entity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import java.sql.Time;
@@ -12,6 +13,7 @@ import java.util.Set;
 @Data
 @Entity
 @Table(name = "schedules", catalog = "courses")
+@Accessors(chain = true)
 public class Schedule {
 
     @Id

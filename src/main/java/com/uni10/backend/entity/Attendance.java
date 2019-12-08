@@ -3,11 +3,13 @@ package com.uni10.backend.entity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 
 @Data
 @Entity
+@Accessors(chain = true)
 @Table(name = "attendance", catalog = "courses")
 public class Attendance {
 
