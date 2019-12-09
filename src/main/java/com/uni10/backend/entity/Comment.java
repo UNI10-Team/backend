@@ -4,12 +4,14 @@ package com.uni10.backend.entity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 
 @Data
 @Entity
 @Table(name = "comments", catalog = "courses")
+@Accessors(chain=true)
 public class Comment {
 
     @Id
