@@ -41,7 +41,7 @@ public class JWTUtil {
         return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
     }
 
-    private  boolean isTokenExpired(String token){
+    public boolean isTokenExpired(String token){
         return extractExpirationDate(token).before(new Date());
     }
 
@@ -52,7 +52,7 @@ public class JWTUtil {
 
     private  String createToken(Map<String, Object> claims, String username) {
         final Date now = new Date();
-        final Date expirationDate = new Date(System.currentTimeMillis() + 10 * 60 * 60 * 1000);
+        final Date expirationDate = new Date(System.currentTimeMillis() + 365 * 60 * 60 * 1000);
 
         return Jwts.builder()
                 .setClaims(claims)
@@ -62,7 +62,4 @@ public class JWTUtil {
                 .signWith(SignatureAlgorithm.HS256, secret).compact();
     }
 
-    public  boolean validateToken(String token, UserDetails userDetails){
-        return extractUsername(token).equals(userDetails.getUsername()) && !isTokenExpired(token);
-    }
 }

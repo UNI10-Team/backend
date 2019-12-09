@@ -1,20 +1,21 @@
 package com.uni10.backend.service;
 
+import com.uni10.backend.annotations.UserValid;
 import com.uni10.backend.api.dto.ScheduleDTO;
-import com.uni10.backend.api.dto.SubjectDTO;
+import com.uni10.backend.api.exceptions.NotFoundException;
 import com.uni10.backend.api.requests.ScheduleRequest;
 import com.uni10.backend.entity.Schedule;
 import com.uni10.backend.repository.CourseRepository;
 import com.uni10.backend.repository.ScheduleRepository;
+import com.uni10.backend.security.SecurityService;
 import com.uni10.backend.specifications.Specifications;
 import lombok.AllArgsConstructor;
+import lombok.val;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
-import java.util.concurrent.ScheduledExecutorService;
 
 @Service
 @AllArgsConstructor
@@ -23,46 +24,71 @@ public class ScheduleService {
     private ScheduleRepository scheduleRepository;
     private CourseRepository courseRepository;
 
-    public Optional<ScheduleDTO> findById(final Long id) {
-        return scheduleRepository.findById(id).map(ScheduleService::scheduleDTO);
-    }
-
     public Page<ScheduleDTO> findAll(final ScheduleRequest scheduleRequest, final long courseId) {
         if (courseRepository.existsById(courseId)) {
-            final String[] pathToCourse = {"courseId"};
             final Pageable pageable = scheduleRequest.toPageable();
-            final Specification<Schedule> specification =
-                    scheduleRequest.toSpecification().and(Specifications.equal(pathToCourse, courseId));
-
+            final Specification<Schedule> specification = scheduleRequest.toSpecification().and(byCourseId(courseId));
             return scheduleRepository.findAll(specification, pageable).map(ScheduleService::scheduleDTO);
         } else {
-            throw new RuntimeException();
+            throw new NotFoundException("Course not found");
         }
     }
 
-
-    public Optional<ScheduleDTO> save(final ScheduleDTO scheduleDTO, final long courseId) {
+    public ScheduleDTO findById(final long id, final long courseId) {
         if (courseRepository.existsById(courseId)) {
-            Schedule schedule = schedule(scheduleDTO, 0);
-            schedule = scheduleRepository.save(schedule);
-            return Optional.ofNullable(scheduleDTO(schedule));
+            val optional = scheduleRepository.findById(id);
+            if (optional.isPresent() && optional.get().getCourseId() == courseId) {
+                return scheduleDTO(optional.get());
+            } else {
+                throw new NotFoundException("Schedule not found");
+            }
         } else {
-            return Optional.empty();
+            throw new NotFoundException("Course not found");
         }
     }
 
-    public Optional<ScheduleDTO> update(final ScheduleDTO dto, final long id) {
-        if (scheduleRepository.existsById(id)) {
-            Schedule schedule = schedule(dto, id);
+    public ScheduleDTO save(final ScheduleDTO scheduleDTO, final long courseId) {
+        if (courseRepository.existsById(courseId)) {
+            Schedule schedule = schedule(scheduleDTO, courseId);
             schedule = scheduleRepository.save(schedule);
-            return Optional.of(scheduleDTO(schedule));
+            return scheduleDTO(schedule);
         } else {
-            return Optional.empty();
+            throw new NotFoundException("Course not found");
         }
     }
 
-    public void deleteById(final Long id) {
-        scheduleRepository.deleteById(id);
+    public ScheduleDTO update(final ScheduleDTO scheduleDTO, final long id, final long courseId) {
+        if (courseRepository.existsById(courseId)) {
+            val optional = scheduleRepository.findById(id);
+            if (optional.isPresent() && optional.get().getCourseId() == courseId) {
+                Schedule schedule = schedule(optional.get(), scheduleDTO);
+                schedule = scheduleRepository.save(schedule);
+                return scheduleDTO(schedule);
+            } else {
+                throw new NotFoundException("Schedule not found");
+            }
+        } else {
+            throw new NotFoundException("Course not found");
+        }
+    }
+
+    @Secured("ROLE_SUBJECT_TEACHER")
+    public void deleteById(final long id, final long courseId) {
+        val optional = scheduleRepository.findById(id);
+        if (optional.isPresent() && optional.get().getCourseId() == courseId) {
+            Schedule schedule = optional.get();
+            if (schedule.getCourse().getSubject().getTeacherId() == SecurityService.getPrincipal().getId()) {
+                scheduleRepository.delete(schedule);
+            }
+        } else {
+            throw new NotFoundException("Schedule not found");
+        }
+    }
+
+
+    private static Specification<Schedule> byCourseId(final long courseId) {
+        final String[] pathToCourse = {"course", "id"};
+        return Specifications.equal(pathToCourse, courseId);
     }
 
     private static ScheduleDTO scheduleDTO(final Schedule schedule) {
@@ -76,10 +102,19 @@ public class ScheduleService {
                 .setTeacherId(schedule.getTeacherId());
     }
 
-    private static Schedule schedule(final ScheduleDTO scheduleDTO, final long id) {
+    private static Schedule schedule(final ScheduleDTO scheduleDTO, final long courseId) {
         return new Schedule()
-                .setId(id)
-                .setCourseId(scheduleDTO.getCourseId())
+                .setId(0)
+                .setCourseId(courseId)
+                .setDay(scheduleDTO.getDay())
+                .setFromTime(scheduleDTO.getFromTime())
+                .setToTime(scheduleDTO.getToTime())
+                .setRoom(scheduleDTO.getRoom())
+                .setTeacherId(scheduleDTO.getTeacherId());
+    }
+
+    private static Schedule schedule(final Schedule schedule, final ScheduleDTO scheduleDTO) {
+        return schedule
                 .setDay(scheduleDTO.getDay())
                 .setFromTime(scheduleDTO.getFromTime())
                 .setToTime(scheduleDTO.getToTime())

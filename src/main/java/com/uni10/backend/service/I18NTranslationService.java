@@ -1,6 +1,5 @@
 package com.uni10.backend.service;
 
-import com.uni10.backend.api.dto.I18NTranslationDTO;
 import com.uni10.backend.api.requests.I18NTranslationRequest;
 import com.uni10.backend.entity.I18NTranslation;
 import com.uni10.backend.repository.I18NTranslationRepository;
@@ -9,6 +8,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -17,19 +18,13 @@ public class I18NTranslationService {
 
     private I18NTranslationRepository i18NTranslationRepository;
 
-    public List<I18NTranslationDTO> findAll(final I18NTranslationRequest i18NTranslationRequest) {
+    public Map<String, String> findAll(final I18NTranslationRequest i18NTranslationRequest) {
         final Specification<I18NTranslation> specification = i18NTranslationRequest.toSpecification();
         return i18NTranslationRepository
                 .findAll(specification)
                 .stream()
-                .map(I18NTranslationService::toI18NTranslationDTO)
-                .collect(Collectors.toList());
-    }
-
-    private static I18NTranslationDTO toI18NTranslationDTO(final I18NTranslation i18NTranslation){
-        return new I18NTranslationDTO()
-                .setTranslation(i18NTranslation.getTranslation())
-                .setLanguage(i18NTranslation.getLanguage())
-                .setKey(i18NTranslation.getResource().getName());
+                .collect(Collectors.toMap(
+                        i18NTranslation -> i18NTranslation.getResource().getName(),
+                        I18NTranslation::getTranslation));
     }
 }

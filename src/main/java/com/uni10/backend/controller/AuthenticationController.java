@@ -5,6 +5,7 @@ import com.uni10.backend.api.requests.AuthenticationResponse;
 import com.uni10.backend.api.requests.RegistrationRequest;
 import com.uni10.backend.security.JWTUtil;
 import com.uni10.backend.security.SecurityService;
+import io.swagger.annotations.Api;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,10 +18,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+@Api
 @Controller
 @RequestMapping("/")
 @AllArgsConstructor
-public class BaseController {
+public class AuthenticationController {
 
     private AuthenticationManager authenticationManager;
     private JWTUtil jwtUtil;
@@ -41,7 +43,7 @@ public class BaseController {
 
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody RegistrationRequest registrationRequest) throws Exception {
-        securityService.registerUser(registrationRequest);
+        //securityService.registerUser(registrationRequest);
         return ResponseEntity.ok().build();
     }
 

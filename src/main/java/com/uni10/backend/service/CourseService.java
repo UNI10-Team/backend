@@ -1,14 +1,13 @@
 package com.uni10.backend.service;
+
 import com.uni10.backend.api.dto.CourseDTO;
 import com.uni10.backend.api.requests.CourseRequest;
 import com.uni10.backend.entity.Course;
 import com.uni10.backend.repository.CourseRepository;
-import lombok.Getter;
-import lombok.experimental.Accessors;
-import org.springframework.data.domain.Pageable;
+import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import lombok.AllArgsConstructor;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -24,17 +23,17 @@ public class CourseService {
         return courseDTO(course);
     }
 
-    public Optional<CourseDTO> findById(final Long id) {
+    public Optional<CourseDTO> findById(final long id) {
         return courseRepository.findById(id).map(CourseService::courseDTO);
     }
 
-    public void deleteById(final Long id) {
+    public void deleteById(final long id) {
         courseRepository.deleteById(id);
     }
 
-    public Optional<CourseDTO> update(final CourseDTO dto, final long id) {
+    public Optional<CourseDTO> update(final CourseDTO courseDTO, final long id) {
         if (courseRepository.existsById(id)) {
-            Course course = course(dto, id);
+            Course course = course(courseDTO, id);
             course = courseRepository.save(course);
             return Optional.of(courseDTO(course));
         } else {

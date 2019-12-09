@@ -1,4 +1,4 @@
-package com.uni10.backend.service;
+package com.uni10.backend.security;
 
 import com.uni10.backend.entity.User;
 import lombok.AllArgsConstructor;
@@ -13,9 +13,13 @@ public class UserInfo implements UserDetails {
 
     private User user;
 
+    public long getId() {
+        return user.getId();
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(user.getRole());
+        return user.getRole().getChildren();
     }
 
     @Override

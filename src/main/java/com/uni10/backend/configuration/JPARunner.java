@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 public class JPARunner implements CommandLineRunner {
 
     private UserRepository userRepository;
+
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override

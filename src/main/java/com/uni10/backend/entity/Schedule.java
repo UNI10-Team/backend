@@ -35,7 +35,7 @@ public class Schedule {
     @Column(name = "teacher_id")
     private long teacherId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "teacher_id", insertable = false, updatable = false)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude

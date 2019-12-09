@@ -1,6 +1,5 @@
 package com.uni10.backend.controller;
 
-import com.uni10.backend.api.dto.I18NTranslationDTO;
 import com.uni10.backend.api.requests.I18NTranslationRequest;
 import com.uni10.backend.service.I18NTranslationService;
 import io.swagger.annotations.Api;
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 
 @Api
@@ -24,7 +24,7 @@ public class I18NTranslationController {
 
     @GetMapping
     @ApiOperation(value = "I18NTranslationController.findAll")
-    public ResponseEntity<List<I18NTranslationDTO>> findAllFiltered(I18NTranslationRequest i18NTranslationRequest) {
+    public ResponseEntity<Map<String, String>> findAll(final I18NTranslationRequest i18NTranslationRequest) {
         return ResponseEntity.ok(i18NTranslationService.findAll(i18NTranslationRequest));
     }
 }
