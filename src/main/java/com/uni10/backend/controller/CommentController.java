@@ -43,8 +43,8 @@ public class CommentController {
 
     @PutMapping("/{id}")
     @ApiOperation(value = "CommentController.update", notes = "Update an existent comment")
-    public ResponseEntity<CommentDTO> update(@Valid @RequestBody CommentDTO subjectDTO, @PathVariable long id) {
-        val optional = commentService.update(subjectDTO, id);
+    public ResponseEntity<CommentDTO> update(@Valid @RequestBody CommentDTO commentDTO, @PathVariable long id) {
+        val optional = commentService.update(commentDTO, id);
         if (optional.isPresent()) {
             return ResponseEntity.ok(optional.get());
         } else {
