@@ -3,12 +3,9 @@ package com.uni10.backend.service;
 import com.uni10.backend.api.exceptions.NotFoundException;
 import com.uni10.backend.repository.CourseRepository;
 import lombok.AllArgsConstructor;
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
-
-import java.util.Arrays;
 
 @Aspect
 @Component
@@ -17,7 +14,7 @@ public class ScheduleServiceHelper {
 
     private CourseRepository courseRepository;
 
-    //@Before("execution(* com.uni10.backend.service.ScheduleService.* (..)) && args(.., courseId)")
+    @Before("execution(* com.uni10.backend.service.ScheduleService.* (..)) && args(.., courseId)")
     public void existsCourse(final long courseId){
         if(!courseRepository.existsById(courseId)){
             throw new NotFoundException("Course not found");

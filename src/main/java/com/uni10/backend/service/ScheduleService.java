@@ -1,11 +1,9 @@
 package com.uni10.backend.service;
 
-import com.uni10.backend.annotations.UserValid;
 import com.uni10.backend.api.dto.ScheduleDTO;
 import com.uni10.backend.api.exceptions.NotFoundException;
 import com.uni10.backend.api.requests.ScheduleRequest;
 import com.uni10.backend.entity.Schedule;
-import com.uni10.backend.repository.CourseRepository;
 import com.uni10.backend.repository.ScheduleRepository;
 import com.uni10.backend.security.SecurityService;
 import com.uni10.backend.specifications.Specifications;
@@ -22,53 +20,36 @@ import org.springframework.stereotype.Service;
 public class ScheduleService {
 
     private ScheduleRepository scheduleRepository;
-    private CourseRepository courseRepository;
 
     public Page<ScheduleDTO> findAll(final ScheduleRequest scheduleRequest, final long courseId) {
-        if (courseRepository.existsById(courseId)) {
-            final Pageable pageable = scheduleRequest.toPageable();
-            final Specification<Schedule> specification = scheduleRequest.toSpecification().and(byCourseId(courseId));
-            return scheduleRepository.findAll(specification, pageable).map(ScheduleService::scheduleDTO);
-        } else {
-            throw new NotFoundException("Course not found");
-        }
+        final Pageable pageable = scheduleRequest.toPageable();
+        final Specification<Schedule> specification = byCourseId(courseId).and(scheduleRequest.toSpecification());
+        return scheduleRepository.findAll(specification, pageable).map(ScheduleService::scheduleDTO);
     }
 
     public ScheduleDTO findById(final long id, final long courseId) {
-        if (courseRepository.existsById(courseId)) {
-            val optional = scheduleRepository.findById(id);
-            if (optional.isPresent() && optional.get().getCourseId() == courseId) {
-                return scheduleDTO(optional.get());
-            } else {
-                throw new NotFoundException("Schedule not found");
-            }
+        val optional = scheduleRepository.findById(id);
+        if (optional.isPresent() && optional.get().getCourseId() == courseId) {
+            return scheduleDTO(optional.get());
         } else {
-            throw new NotFoundException("Course not found");
+            throw new NotFoundException("Schedule not found");
         }
     }
 
     public ScheduleDTO save(final ScheduleDTO scheduleDTO, final long courseId) {
-        if (courseRepository.existsById(courseId)) {
-            Schedule schedule = schedule(scheduleDTO, courseId);
-            schedule = scheduleRepository.save(schedule);
-            return scheduleDTO(schedule);
-        } else {
-            throw new NotFoundException("Course not found");
-        }
+        Schedule schedule = schedule(scheduleDTO, courseId);
+        schedule = scheduleRepository.save(schedule);
+        return scheduleDTO(schedule);
     }
 
     public ScheduleDTO update(final ScheduleDTO scheduleDTO, final long id, final long courseId) {
-        if (courseRepository.existsById(courseId)) {
-            val optional = scheduleRepository.findById(id);
-            if (optional.isPresent() && optional.get().getCourseId() == courseId) {
-                Schedule schedule = schedule(optional.get(), scheduleDTO);
-                schedule = scheduleRepository.save(schedule);
-                return scheduleDTO(schedule);
-            } else {
-                throw new NotFoundException("Schedule not found");
-            }
+        val optional = scheduleRepository.findById(id);
+        if (optional.isPresent() && optional.get().getCourseId() == courseId) {
+            Schedule schedule = schedule(optional.get(), scheduleDTO);
+            schedule = scheduleRepository.save(schedule);
+            return scheduleDTO(schedule);
         } else {
-            throw new NotFoundException("Course not found");
+            throw new NotFoundException("Schedule not found");
         }
     }
 
