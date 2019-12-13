@@ -31,41 +31,32 @@ public class SubjectController {
 
     @GetMapping
     @ApiOperation(value = "SubjectController.findAll", notes = "Find all Subjects")
-    public Page<SubjectDTO> findAll(SubjectRequest personRequest) {
-        return subjectService.findAll(personRequest);
+    public ResponseEntity<Page<SubjectDTO>> findAll(final SubjectRequest personRequest) {
+        return ResponseEntity.ok(subjectService.findAll(personRequest));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id:[0-9]+}")
     @ApiOperation(value = "SubjectController.findById", notes = "Find one Subject by id")
-    public ResponseEntity<SubjectDTO> findById(@PathVariable long id) {
-        val optional = subjectService.findById(id);
-        if (optional.isPresent()) {
-            return ResponseEntity.ok(optional.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<SubjectDTO> findById(@PathVariable final long id) {
+        return ResponseEntity.ok(subjectService.findById(id));
     }
 
     @PostMapping
     @ApiOperation(value = "SubjectController.save", notes = "Save a new subject")
-    public ResponseEntity<SubjectDTO> save(@Valid @RequestBody SubjectDTO subjectDTO) {
+    public ResponseEntity<SubjectDTO> save(@Valid @RequestBody final SubjectDTO subjectDTO) {
         return ResponseEntity.ok(subjectService.save(subjectDTO));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id:[0-9]+}")
     @ApiOperation(value = "PersonController.update", notes = "Update an existent subject")
-    public ResponseEntity<SubjectDTO> update(@Valid @RequestBody SubjectDTO subjectDTO, @PathVariable long id) {
-        val optional = subjectService.update(subjectDTO, id);
-        if (optional.isPresent()) {
-            return ResponseEntity.ok(optional.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<SubjectDTO> update(@Valid @RequestBody final SubjectDTO subjectDTO,
+                                             @PathVariable final long id) {
+        return ResponseEntity.ok(subjectService.update(subjectDTO, id));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id:[0-9]+}")
     @ApiOperation(value = "SubjectController.deleteById", notes = "Delete an existent subject")
-    public ResponseEntity deleteById(@PathVariable long id) {
+    public ResponseEntity deleteById(@PathVariable final long id) {
         subjectService.deleteById(id);
         return ResponseEntity.ok().build();
     }

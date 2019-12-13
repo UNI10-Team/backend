@@ -19,14 +19,14 @@ public class JPARunner implements CommandLineRunner {
     @Override
     public void run(String... args) {
         User user = new User();
-        user.setUsername("uni11");
-        user.setFirstName("UNI10");
-        user.setLastName("ADMIN");
+        user.setUsername("student");
+        user.setFirstName("ONE");
+        user.setLastName("STUDENT");
         user.setPassword("password");
         user.setEmail(user.getUsername() + "@scs.ubbcluj.ro");
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setRole(Role.ROLE_STUDENT);
-        //userRepository.save(user);
+        // userRepository.save(user);
 
         final String ANSI_BLUE = "\u001B[34m";
         final String ANSI_RESET = "\u001B[0m";

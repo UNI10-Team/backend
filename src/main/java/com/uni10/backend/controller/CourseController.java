@@ -15,49 +15,45 @@ import java.util.List;
 
 @Api(value = "CourseController")
 @RestController
-@RequestMapping("/courses")
+@RequestMapping("subjects/{subjectId:[0-9]+}/courses")
 @AllArgsConstructor
 public class CourseController {
     private CourseService courseService;
 
     @GetMapping
     @ApiOperation(value = "CourseController.findAll", notes = "Find all courses")
-    public List<CourseDTO> findAll(CourseRequest courseRequest) {
-        return courseService.findAll(courseRequest);
+    public ResponseEntity<List<CourseDTO>> findAll(CourseRequest courseRequest,
+                                   @PathVariable("subjectId") final long subjectId) {
+        return ResponseEntity.ok(courseService.findAll(courseRequest, subjectId));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id:[0-9]+}")
     @ApiOperation(value = "CourseController.findById", notes = "Find one course by id")
-    public ResponseEntity<CourseDTO> findById(@PathVariable long id) {
-        val optional = courseService.findById(id);
-        if (optional.isPresent()) {
-            return ResponseEntity.ok(optional.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<CourseDTO> findById(@PathVariable("id") final long id,
+                                              @PathVariable("subjectId") final long subjectId) {
+        return ResponseEntity.ok(courseService.findById(id, subjectId));
     }
 
     @PostMapping
     @ApiOperation(value = "CourseController.save", notes = "Save a new course")
-    public ResponseEntity<CourseDTO> save(@Valid @RequestBody CourseDTO courseDTO) {
-        return ResponseEntity.ok(courseService.save(courseDTO));
+    public ResponseEntity<CourseDTO> save(@Valid @RequestBody final CourseDTO courseDTO,
+                                          @PathVariable("subjectId") final long subjectId) {
+        return ResponseEntity.ok(courseService.save(courseDTO, subjectId));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id:[0-9]+}")
     @ApiOperation(value = "CourseController.update", notes = "Update an existent course")
-    public ResponseEntity<CourseDTO> update(@Valid @RequestBody CourseDTO subjectDTO, @PathVariable long id) {
-        val optional = courseService.update(subjectDTO, id);
-        if (optional.isPresent()) {
-            return ResponseEntity.ok(optional.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<CourseDTO> update(@Valid @RequestBody final CourseDTO courseDTO,
+                                            @PathVariable("id") final long id,
+                                            @PathVariable("subjectId") final long subjectId) {
+        return ResponseEntity.ok(courseService.update(courseDTO, id, subjectId));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id:[0-9]+}")
     @ApiOperation(value = "CourseController.deleteById", notes = "Delete an existent course")
-    public ResponseEntity deleteById(@PathVariable long id) {
-        courseService.deleteById(id);
+    public ResponseEntity<Void> deleteById(@PathVariable("id") final long id,
+                                     @PathVariable("subjectId") final long subjectId) {
+        courseService.deleteById(id, subjectId);
         return ResponseEntity.ok().build();
     }
 

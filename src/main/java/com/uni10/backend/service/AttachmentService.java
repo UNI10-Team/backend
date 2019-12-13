@@ -20,7 +20,7 @@ public class AttachmentService {
     }
 
     public AttachmentDTO save(final AttachmentDTO attachmentDTO){
-        Attachment attachment = attachment(attachmentDTO, 0);
+        Attachment attachment = attachment(attachmentDTO);
         attachment = attachmentRepository.save(attachment);
         return attachmentDTO(attachment);
     }
@@ -38,9 +38,9 @@ public class AttachmentService {
                 .setCourseId(attachment.courseId());
     }
 
-    private static Attachment attachment(final AttachmentDTO attachmentDTO, final long id){
+    private static Attachment attachment(final AttachmentDTO attachmentDTO){
         return new Attachment()
-                .id(id)
+                .id(0)
                 .data(attachmentDTO.getData().getBytes())
                 .name(attachmentDTO.getName())
                 .type(attachmentDTO.getType())

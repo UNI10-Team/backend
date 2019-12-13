@@ -1,6 +1,7 @@
 package com.uni10.backend.service;
 
 import com.uni10.backend.api.dto.ScheduleDTO;
+import com.uni10.backend.api.exceptions.ForbiddenException;
 import com.uni10.backend.api.exceptions.NotFoundException;
 import com.uni10.backend.api.requests.ScheduleRequest;
 import com.uni10.backend.entity.Schedule;
@@ -60,6 +61,9 @@ public class ScheduleService {
             Schedule schedule = optional.get();
             if (schedule.getCourse().getSubject().getTeacherId() == SecurityService.getPrincipal().getId()) {
                 scheduleRepository.delete(schedule);
+            }
+            else{
+                throw new ForbiddenException("Only the Subject teacher can perform this action");
             }
         } else {
             throw new NotFoundException("Schedule not found");

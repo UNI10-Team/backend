@@ -1,10 +1,14 @@
 package com.uni10.backend.service;
 
 import com.uni10.backend.api.dto.SubjectDTO;
+import com.uni10.backend.api.exceptions.ForbiddenException;
+import com.uni10.backend.api.exceptions.NotFoundException;
 import com.uni10.backend.api.requests.SubjectRequest;
 import com.uni10.backend.entity.Subject;
 import com.uni10.backend.repository.SubjectRepository;
+import com.uni10.backend.security.SecurityService;
 import lombok.AllArgsConstructor;
+import lombok.val;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -18,8 +22,9 @@ public class SubjectService {
 
     private SubjectRepository subjectRepository;
 
-    public Optional<SubjectDTO> findById(final Long id) {
-        return subjectRepository.findById(id).map(SubjectService::subjectDTO);
+    public SubjectDTO findById(final long id) {
+        val optional = subjectRepository.findById(id);
+        return subjectDTO(optional.orElseThrow(NotFoundException::new));
     }
 
     public Page<SubjectDTO> findAll(final SubjectRequest subjectRequest) {
@@ -28,24 +33,27 @@ public class SubjectService {
         return subjectRepository.findAll(specification, pageable).map(SubjectService::subjectDTO);
     }
 
-    public SubjectDTO save(final SubjectDTO dto) {
-        Subject subject = subject(dto, 0);
+    public SubjectDTO save(final SubjectDTO subjectDTO) {
+        Subject subject = subject(subjectDTO);
         subject = subjectRepository.save(subject);
         return subjectDTO(subject);
     }
 
-    public Optional<SubjectDTO> update(final SubjectDTO dto, final long id) {
-        if (subjectRepository.existsById(id)) {
-            Subject subject = subject(dto, id);
-            subject = subjectRepository.save(subject);
-            return Optional.of(subjectDTO(subject));
-        } else {
-            return Optional.empty();
-        }
+    public SubjectDTO update(final SubjectDTO subjectDTO, final long id) {
+        val optional = subjectRepository.findById(id);
+        Subject subject = subject(optional.orElseThrow(NotFoundException::new), subjectDTO);
+        subject = subjectRepository.save(subject);
+        return subjectDTO(subject);
     }
 
-    public void deleteById(final Long id) {
-        subjectRepository.deleteById(id);
+    public void deleteById(final long id) {
+        val optional = subjectRepository.findById(id);
+        final Subject subject = optional.orElseThrow(NotFoundException::new);
+        if (subject.getTeacherId() == SecurityService.getPrincipal().getId()) {
+            subjectRepository.delete(subject);
+        } else {
+            throw new ForbiddenException("Only the Subject teacher can perform this action");
+        }
     }
 
     private static SubjectDTO subjectDTO(final Subject subject) {
@@ -55,9 +63,15 @@ public class SubjectService {
                 .setTeacherId(subject.getTeacherId());
     }
 
-    private static Subject subject(final SubjectDTO subjectDTO, final long id) {
+    private static Subject subject(final SubjectDTO subjectDTO) {
         return new Subject()
-                .setId(id)
+                .setId(0)
+                .setName(subjectDTO.getName())
+                .setTeacherId(subjectDTO.getTeacherId());
+    }
+
+    private static Subject subject(final Subject subject, final SubjectDTO subjectDTO) {
+        return subject
                 .setName(subjectDTO.getName())
                 .setTeacherId(subjectDTO.getTeacherId());
     }

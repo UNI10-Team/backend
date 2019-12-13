@@ -25,7 +25,7 @@ public class Subject {
     @Column(name = "teacher_id")
     private long teacherId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)//todo
     @JoinColumn(name = "teacher_id", insertable = false, updatable = false)
     private User teacher;
 
