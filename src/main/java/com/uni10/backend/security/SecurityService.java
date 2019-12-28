@@ -1,7 +1,6 @@
 package com.uni10.backend.security;
 
 
-import com.uni10.backend.api.requests.RegistrationRequest;
 import com.uni10.backend.entity.User;
 import com.uni10.backend.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -17,6 +16,7 @@ import org.springframework.stereotype.Component;
 public class SecurityService implements UserDetailsService {
 
     private UserRepository userRepository;
+    private final ThreadLocal<User> actingUser = new ThreadLocal<>();
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -24,7 +24,9 @@ public class SecurityService implements UserDetailsService {
         if (!optional.isPresent()) {
             throw new UsernameNotFoundException(username);
         }
-        return new UserInfo(optional.get());
+        final User user = optional.get();
+        actingUser.set(user);
+        return new UserInfo(user);
     }
 
     public static UserInfo getPrincipal(){
@@ -33,8 +35,7 @@ public class SecurityService implements UserDetailsService {
     }
 
     public User getCurrentUser(){
-        UserInfo userInfo = getPrincipal();
-        return userRepository.findByUsername(userInfo.getUsername());
+        return actingUser.get();
     }
 
 }

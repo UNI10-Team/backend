@@ -15,7 +15,7 @@ import javax.validation.Valid;
 
 @Api(value = "AttendanceController")
 @RestController
-@RequestMapping("/Attendance")
+@RequestMapping("/attendance")
 @AllArgsConstructor
 public class AttendanceController {
     private AttendanceService attendanceService;
@@ -29,12 +29,7 @@ public class AttendanceController {
     @GetMapping("/{id}")
     @ApiOperation(value = "AttendanceController.findById", notes = "Find one attendance by id")
     public ResponseEntity<AttendanceDTO> findById(@PathVariable final long id) {
-        val optional = attendanceService.findById(id);
-        if (optional.isPresent()) {
-            return ResponseEntity.ok(optional.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.of(attendanceService.findById(id));
     }
 
     @PostMapping
@@ -46,12 +41,7 @@ public class AttendanceController {
     @PutMapping("/{id}")
     @ApiOperation(value = "AttendanceController.update", notes = "Update an existent attendance")
     public ResponseEntity<AttendanceDTO> update(@Valid @RequestBody final AttendanceDTO attendanceDTO, @PathVariable final long id) {
-        val optional = attendanceService.update(attendanceDTO, id);
-        if (optional.isPresent()) {
-            return ResponseEntity.ok(optional.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(attendanceService.update(attendanceDTO, id));
     }
 
     @DeleteMapping("/{id}")

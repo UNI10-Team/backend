@@ -12,6 +12,7 @@ import java.util.List;
 
 @Getter
 public class PagedRequest {
+
     @ApiParam(name = "page", defaultValue = "0")
     private int page = 0;
 

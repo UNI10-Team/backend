@@ -3,12 +3,14 @@ package com.uni10.backend.entity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
 @Data
+@Accessors(chain = true)
 @Entity
 @Table(name = "i18nresources", catalog = "i18n")
 public class I18NResource {

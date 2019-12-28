@@ -18,7 +18,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -36,6 +35,7 @@ import java.util.stream.Collectors;
  * All rights reserved
  */
 
+/*
 // @Component
 @AllArgsConstructor
 public class HttpParserRunner implements CommandLineRunner {
@@ -179,8 +179,8 @@ public class HttpParserRunner implements CommandLineRunner {
                 .setRoom(subject.getRoom())
                 .setTeacherId(userRepository.findByUsername(subject.getTeacher()).getId())
                 .setCourseId(course(subject.getType(), subject.getName()).getId())
-                .setFromTime(from)
-                .setToTime(to);
+                .setStartAt(from)
+                .setEndAt(to);
     }
 
     private Subject subject(String name) {
@@ -284,3 +284,6 @@ public class HttpParserRunner implements CommandLineRunner {
                 .setRole(role);
     }
 }
+
+
+ */

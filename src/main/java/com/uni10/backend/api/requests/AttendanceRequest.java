@@ -15,8 +15,10 @@ import java.util.Set;
 
 @Getter
 public class AttendanceRequest extends PagedRequest implements Filter<Attendance> {
+
     @ApiParam(name = "studentId")
     private List<String> studentId = new ArrayList<>();
+
     @ApiParam(name = "scheduleId")
     private List<String> scheduleId = new ArrayList<>();
 
@@ -24,7 +26,7 @@ public class AttendanceRequest extends PagedRequest implements Filter<Attendance
     public Specification<Attendance> toSpecification() {
         Set<Specification<Attendance>> specifications = new HashSet<>();
         specifications.add(toSpecification("studentId", studentId));
-        specifications.add((toSpecification("scheduleId",scheduleId)));
+        specifications.add(toSpecification("scheduleId",scheduleId));
         return Specifications.and(specifications);
     }
 }

@@ -38,7 +38,7 @@ public class SubjectController {
     @GetMapping("/{id:[0-9]+}")
     @ApiOperation(value = "SubjectController.findById", notes = "Find one Subject by id")
     public ResponseEntity<SubjectDTO> findById(@PathVariable final long id) {
-        return ResponseEntity.ok(subjectService.findById(id));
+        return ResponseEntity.of(subjectService.findById(id));
     }
 
     @PostMapping

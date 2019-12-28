@@ -24,19 +24,19 @@ public class ScheduleValidator implements ConstraintValidator<ScheduleValid, Sch
 
         context.disableDefaultConstraintViolation();
 
-        if(value.getDay() == null || value.getDay().equals("")){
+        if(value.getDay() < 1 || value.getDay() > 5){
             isValid = false;
-            context.buildConstraintViolationWithTemplate("Day should not be empty")
+            context.buildConstraintViolationWithTemplate("Day should be a working day")
                     .addPropertyNode("day")
                     .addConstraintViolation();
         }
-        if(value.getFromTime() == null){
+        if(value.getStartAt() == null){
             isValid = false;
             context.buildConstraintViolationWithTemplate("Fromtime should not be empty")
                     .addPropertyNode("fromTime")
                     .addConstraintViolation();
         }
-        if(value.getToTime() == null){
+        if(value.getEndAt() == null){
             isValid = false;
             context.buildConstraintViolationWithTemplate("ToTime should not be empty")
                     .addPropertyNode("toTime")

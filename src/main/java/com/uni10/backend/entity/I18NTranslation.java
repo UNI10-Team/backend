@@ -1,6 +1,7 @@
 package com.uni10.backend.entity;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Data
+@Accessors(chain = true)
 @Entity
 @Table(name = "i18ntranslations", catalog = "i18n")
 public class I18NTranslation {

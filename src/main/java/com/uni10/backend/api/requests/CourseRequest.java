@@ -12,9 +12,11 @@ import java.util.List;
 import java.util.Set;
 
 @Getter
-public class CourseRequest implements Filter<Course> {
+public class CourseRequest extends PagedRequest implements Filter<Course> {
+
     @ApiParam(name = "type")
     private String type;
+
     @ApiParam(name = "subject")
     private List<String> subject = new ArrayList<>();
 

@@ -19,37 +19,27 @@ import java.util.Set;
 
 @Api(value = "SubjectController")
 @RestController
-@RequestMapping("/courses/{courseId}/attachments/{attachmentId}/comments")
+@RequestMapping("/comments")
 @AllArgsConstructor
 public class CommentController {
     private CommentService commentService;
 
     @GetMapping
     @ApiOperation(value = "CommentController.findAll", notes = "Find all comments")
-    public Page<CommentDTO> findAll(CommentRequest commentRequest, @PathVariable(name = "attachmentId") final long attachmentId) {
-        return commentService.findAll(commentRequest, attachmentId);
+    public Page<CommentDTO> findAll(CommentRequest commentRequest) {
+        return commentService.findAll(commentRequest);
     }
 
     @PostMapping
     @ApiOperation(value = "CommentController.save", notes = "Save a new comment")
-    public ResponseEntity<CommentDTO> save(@PathVariable(name = "attachmentId") final long attachmentId, @Valid @RequestBody CommentDTO commentDTO) {
-        val optional = commentService.save(commentDTO, attachmentId);
-        if (optional.isPresent()) {
-            return ResponseEntity.ok(optional.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<CommentDTO> save(@Valid @RequestBody CommentDTO commentDTO) {
+        return ResponseEntity.ok(commentService.save(commentDTO));
     }
 
     @PutMapping("/{id}")
     @ApiOperation(value = "CommentController.update", notes = "Update an existent comment")
     public ResponseEntity<CommentDTO> update(@Valid @RequestBody CommentDTO commentDTO, @PathVariable long id) {
-        val optional = commentService.update(commentDTO, id);
-        if (optional.isPresent()) {
-            return ResponseEntity.ok(optional.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(commentService.update(commentDTO, id));
     }
 
     @DeleteMapping("/{id}")

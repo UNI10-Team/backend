@@ -1,172 +1,282 @@
-#!/usr/bin/env sh
-
-##############################################################################
-##
-##  Gradle start up script for UN*X
-##
-##############################################################################
-
-# Attempt to set APP_HOME
-# Resolve links: $0 may be a link
-PRG="$0"
-# Need this for relative symlinks.
-while [ -h "$PRG" ]; do
-  ls=$(ls -ld "$PRG")
-  link=$(expr "$ls" : '.*-> \(.*\)$')
-  if expr "$link" : '/.*' >/dev/null; then
-    PRG="$link"
-  else
-    PRG=$(dirname "$PRG")"/$link"
-  fi
-done
-SAVED="$(pwd)"
-cd "$(dirname \"$PRG\")/" >/dev/null
-APP_HOME="$(pwd -P)"
-cd "$SAVED" >/dev/null
-
-APP_NAME="Gradle"
-APP_BASE_NAME=$(basename "$0")
-
-# Add default JVM options here. You can also use JAVA_OPTS and GRADLE_OPTS to pass JVM options to this script.
-DEFAULT_JVM_OPTS=""
-
-# Use the maximum available, or set MAX_FD != -1 to use that value.
-MAX_FD="maximum"
-
-warn() {
-  echo "$*"
-}
-
-die() {
-  echo
-  echo "$*"
-  echo
-  exit 1
-}
-
-# OS specific support (must be 'true' or 'false').
-cygwin=false
-msys=false
-darwin=false
-nonstop=false
-case "$(uname)" in
-CYGWIN*)
-  cygwin=true
-  ;;
-Darwin*)
-  darwin=true
-  ;;
-MINGW*)
-  msys=true
-  ;;
-NONSTOP*)
-  nonstop=true
-  ;;
-esac
-
-CLASSPATH=$APP_HOME/gradle/wrapper/gradle-wrapper.jar
-
-# Determine the Java command to use to start the JVM.
-if [ -n "$JAVA_HOME" ]; then
-  if [ -x "$JAVA_HOME/jre/sh/java" ]; then
-    # IBM's JDK on AIX uses strange locations for the executables
-    JAVACMD="$JAVA_HOME/jre/sh/java"
-  else
-    JAVACMD="$JAVA_HOME/bin/java"
-  fi
-  if [ ! -x "$JAVACMD" ]; then
-    die "ERROR: JAVA_HOME is set to an invalid directory: $JAVA_HOME
-
-Please set the JAVA_HOME variable in your environment to match the
-location of your Java installation."
-  fi
-else
-  JAVACMD="java"
-  which java >/dev/null 2>&1 || die "ERROR: JAVA_HOME is not set and no 'java' command could be found in your PATH.
-
-Please set the JAVA_HOME variable in your environment to match the
-location of your Java installation."
-fi
-
-# Increase the maximum file descriptors if we can.
-if [ "$cygwin" = "false" -a "$darwin" = "false" -a "$nonstop" = "false" ]; then
-  MAX_FD_LIMIT=$(ulimit -H -n)
-  if [ $? -eq 0 ]; then
-    if [ "$MAX_FD" = "maximum" -o "$MAX_FD" = "max" ]; then
-      MAX_FD="$MAX_FD_LIMIT"
-    fi
-    ulimit -n $MAX_FD
-    if [ $? -ne 0 ]; then
-      warn "Could not set maximum file descriptor limit: $MAX_FD"
-    fi
-  else
-    warn "Could not query maximum file descriptor limit: $MAX_FD_LIMIT"
-  fi
-fi
-
-# For Darwin, add options to specify how the application appears in the dock
-if $darwin; then
-  GRADLE_OPTS="$GRADLE_OPTS \"-Xdock:name=$APP_NAME\" \"-Xdock:icon=$APP_HOME/media/gradle.icns\""
-fi
-
-# For Cygwin, switch paths to Windows format before running java
-if $cygwin; then
-  APP_HOME=$(cygpath --path --mixed "$APP_HOME")
-  CLASSPATH=$(cygpath --path --mixed "$CLASSPATH")
-  JAVACMD=$(cygpath --unix "$JAVACMD")
-
-  # We build the pattern for arguments to be converted via cygpath
-  ROOTDIRSRAW=$(find -L / -maxdepth 1 -mindepth 1 -type d 2>/dev/null)
-  SEP=""
-  for dir in $ROOTDIRSRAW; do
-    ROOTDIRS="$ROOTDIRS$SEP$dir"
-    SEP="|"
-  done
-  OURCYGPATTERN="(^($ROOTDIRS))"
-  # Add a user-defined pattern to the cygpath arguments
-  if [ "$GRADLE_CYGPATTERN" != "" ]; then
-    OURCYGPATTERN="$OURCYGPATTERN|($GRADLE_CYGPATTERN)"
-  fi
-  # Now convert the arguments - kludge to limit ourselves to /bin/sh
-  i=0
-  for arg in "$@"; do
-    CHECK=$(echo "$arg" | egrep -c "$OURCYGPATTERN" -)
-    CHECK2=$(echo "$arg" | egrep -c "^-") ### Determine if an option
-
-    if [ $CHECK -ne 0 ] && [ $CHECK2 -eq 0 ]; then ### Added a condition
-      eval $(echo args$i)=$(cygpath --path --ignore --mixed "$arg")
-    else
-      eval $(echo args$i)="\"$arg\""
-    fi
-    i=$((i + 1))
-  done
-  case $i in
-  0) set -- ;;
-  1) set -- "$args0" ;;
-  2) set -- "$args0" "$args1" ;;
-  3) set -- "$args0" "$args1" "$args2" ;;
-  4) set -- "$args0" "$args1" "$args2" "$args3" ;;
-  5) set -- "$args0" "$args1" "$args2" "$args3" "$args4" ;;
-  6) set -- "$args0" "$args1" "$args2" "$args3" "$args4" "$args5" ;;
-  7) set -- "$args0" "$args1" "$args2" "$args3" "$args4" "$args5" "$args6" ;;
-  8) set -- "$args0" "$args1" "$args2" "$args3" "$args4" "$args5" "$args6" "$args7" ;;
-  9) set -- "$args0" "$args1" "$args2" "$args3" "$args4" "$args5" "$args6" "$args7" "$args8" ;;
-  esac
-fi
-
-# Escape application args
-save() {
-  for i; do printf %s\\n "$i" | sed "s/'/'\\\\''/g;1s/^/'/;\$s/\$/' \\\\/"; done
-  echo " "
-}
-APP_ARGS=$(save "$@")
-
-# Collect all arguments for the java command, following the shell quoting and substitution rules
-eval set -- $DEFAULT_JVM_OPTS $JAVA_OPTS $GRADLE_OPTS "\"-Dorg.gradle.appname=$APP_BASE_NAME\"" -classpath "\"$CLASSPATH\"" org.gradle.wrapper.GradleWrapperMain "$APP_ARGS"
-
-# by default we should be in the correct project dir, but when run from Finder on Mac, the cwd is wrong
-if [ "$(uname)" = "Darwin" ] && [ "$HOME" = "$PWD" ]; then
-  cd "$(dirname "$0")"
-fi
-
-exec "$JAVACMD" "$@"
+INSERT INTO courses.courses (id, subject_id, type) VALUES (1, 14, 'Laborator');
+INSERT INTO courses.courses (id, subject_id, type) VALUES (2, 1, 'Curs');
+INSERT INTO courses.courses (id, subject_id, type) VALUES (3, 2, 'Curs');
+INSERT INTO courses.courses (id, subject_id, type) VALUES (4, 2, 'Seminar');
+INSERT INTO courses.courses (id, subject_id, type) VALUES (5, 3, 'Curs');
+INSERT INTO courses.courses (id, subject_id, type) VALUES (6, 4, 'Laborator');
+INSERT INTO courses.courses (id, subject_id, type) VALUES (7, 3, 'Laborator');
+INSERT INTO courses.courses (id, subject_id, type) VALUES (8, 4, 'Curs');
+INSERT INTO courses.courses (id, subject_id, type) VALUES (9, 2, 'Laborator');
+INSERT INTO courses.courses (id, subject_id, type) VALUES (10, 5, 'Seminar');
+INSERT INTO courses.courses (id, subject_id, type) VALUES (11, 1, 'Seminar');
+INSERT INTO courses.courses (id, subject_id, type) VALUES (12, 5, 'Curs');
+INSERT INTO courses.courses (id, subject_id, type) VALUES (13, 6, 'Curs');
+INSERT INTO courses.courses (id, subject_id, type) VALUES (14, 7, 'Curs');
+INSERT INTO courses.courses (id, subject_id, type) VALUES (15, 8, 'Curs');
+INSERT INTO courses.courses (id, subject_id, type) VALUES (16, 1, 'Laborator');
+INSERT INTO courses.courses (id, subject_id, type) VALUES (17, 9, 'Curs');
+INSERT INTO courses.courses (id, subject_id, type) VALUES (18, 10, 'Curs');
+INSERT INTO courses.courses (id, subject_id, type) VALUES (19, 11, 'Curs');
+INSERT INTO courses.courses (id, subject_id, type) VALUES (20, 9, 'Laborator');
+INSERT INTO courses.courses (id, subject_id, type) VALUES (21, 8, 'Laborator');
+INSERT INTO courses.courses (id, subject_id, type) VALUES (22, 10, 'Seminar');
+INSERT INTO courses.courses (id, subject_id, type) VALUES (23, 11, 'Laborator');
+INSERT INTO courses.courses (id, subject_id, type) VALUES (24, 7, 'Laborator');
+INSERT INTO courses.courses (id, subject_id, type) VALUES (25, 12, 'Curs');
+INSERT INTO courses.courses (id, subject_id, type) VALUES (26, 13, 'Curs');
+INSERT INTO courses.courses (id, subject_id, type) VALUES (27, 12, 'Laborator');
+INSERT INTO courses.courses (id, subject_id, type) VALUES (28, 6, 'Laborator');
+INSERT INTO courses.courses (id, subject_id, type) VALUES (29, 13, 'Laborator');
+INSERT INTO courses.courses (id, subject_id, type) VALUES (30, 14, 'Curs');
+INSERT INTO courses.courses (id, subject_id, type) VALUES (31, 27, 'Laborator');
+INSERT INTO courses.courses (id, subject_id, type) VALUES (32, 27, 'Curs');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (1, 1, 'Luni', '06:00:00', 'L339', 14, '08:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (2, 2, 'Luni', '10:00:00', '6/II', 2, '12:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (3, 3, 'Luni', '12:00:00', '6/II', 3, '14:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (4, 4, 'Luni', '14:00:00', 'Goanga', 3, '16:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (5, 5, 'Marti', '06:00:00', 'C335', 4, '08:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (6, 6, 'Marti', '08:00:00', 'L338', 5, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (7, 7, 'Marti', '08:00:00', 'L402', 4, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (8, 8, 'Marti', '10:00:00', 'C335', 5, '12:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (9, 9, 'Marti', '12:00:00', 'L439', 18, '14:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (10, 10, 'Marti', '14:00:00', 'L002', 6, '16:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (11, 9, 'Marti', '14:00:00', 'L439', 18, '16:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (12, 11, 'Miercuri', '12:00:00', 'L001', 19, '14:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (13, 12, 'Miercuri', '14:00:00', '7/I', 6, '16:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (14, 13, 'Joi', '06:00:00', 'C310', 7, '08:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (15, 14, 'Joi', '06:00:00', 'C335', 8, '08:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (16, 15, 'Joi', '06:00:00', 'C510', 9, '08:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (17, 16, 'Joi', '06:00:00', 'L306', 20, '08:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (18, 17, 'Joi', '06:00:00', 'L534', 10, '08:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (19, 18, 'Joi', '08:00:00', 'A303', 11, '09:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (20, 19, 'Joi', '08:00:00', 'C335', 12, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (21, 16, 'Joi', '08:00:00', 'L343', 20, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (22, 20, 'Joi', '08:00:00', 'L439', 10, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (23, 21, 'Joi', '08:00:00', 'L439', 9, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (24, 22, 'Joi', '09:00:00', 'A303', 11, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (25, 23, 'Joi', '10:00:00', 'L338', 21, '12:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (26, 24, 'Joi', '10:00:00', 'L439', 8, '12:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (27, 25, 'Joi', '12:00:00', 'C310', 13, '14:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (28, 26, 'Joi', '12:00:00', 'C335', 9, '14:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (29, 27, 'Joi', '14:00:00', 'L301', 13, '16:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (30, 28, 'Joi', '14:00:00', 'L320', 7, '16:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (31, 29, 'Joi', '14:00:00', 'L439', 9, '16:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (32, 1, 'Vineri', '06:00:00', 'L302', 14, '08:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (33, 30, 'Vineri', '16:00:00', '2/I', 14, '18:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (34, 4, 'Luni', '14:00:00', 'Goanga', 3, '16:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (35, 7, 'Marti', '08:00:00', 'L402', 4, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (36, 6, 'Marti', '12:00:00', 'L338', 5, '14:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (37, 9, 'Marti', '14:00:00', 'L343', 22, '16:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (38, 1, 'Miercuri', '08:00:00', 'L321', 23, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (39, 1, 'Miercuri', '08:00:00', 'L321', 23, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (40, 16, 'Miercuri', '10:00:00', 'L339', 24, '12:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (41, 16, 'Miercuri', '12:00:00', 'L302', 24, '14:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (42, 24, 'Joi', '08:00:00', 'L338', 8, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (43, 27, 'Joi', '10:00:00', 'L306', 13, '12:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (44, 23, 'Joi', '14:00:00', 'L338', 25, '16:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (45, 29, 'Joi', '16:00:00', 'L336', 9, '18:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (46, 11, 'Vineri', '06:00:00', 'A311', 19, '08:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (47, 9, 'Vineri', '10:00:00', 'L306', 18, '12:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (48, 6, 'Marti', '08:00:00', 'L338', 5, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (49, 7, 'Marti', '08:00:00', 'L402', 4, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (50, 11, 'Miercuri', '10:00:00', 'C510', 19, '12:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (51, 4, 'Miercuri', '12:00:00', 'C512', 3, '14:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (52, 9, 'Miercuri', '14:00:00', 'L302', 22, '16:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (53, 9, 'Miercuri', '16:00:00', 'L321', 22, '18:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (54, 24, 'Joi', '10:00:00', 'L439', 8, '12:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (55, 27, 'Joi', '14:00:00', 'L301', 13, '16:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (56, 29, 'Joi', '14:00:00', 'L336', 9, '16:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (57, 23, 'Joi', '16:00:00', 'L338', 25, '18:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (58, 1, 'Vineri', '06:00:00', 'L001', 23, '08:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (59, 1, 'Vineri', '06:00:00', 'L001', 23, '08:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (60, 16, 'Vineri', '10:00:00', 'L002', 26, '12:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (61, 16, 'Vineri', '10:00:00', 'L339', 20, '12:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (62, 7, 'Marti', '08:00:00', 'L402', 4, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (63, 6, 'Marti', '12:00:00', 'L338', 5, '14:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (64, 16, 'Marti', '14:00:00', 'L321', 19, '16:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (65, 9, 'Marti', '16:00:00', 'L001', 22, '18:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (66, 9, 'Miercuri', '06:00:00', 'L002', 22, '08:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (67, 4, 'Miercuri', '12:00:00', 'C512', 3, '14:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (68, 16, 'Miercuri', '14:00:00', 'L336', 19, '16:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (69, 23, 'Joi', '10:00:00', 'L338', 21, '12:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (70, 27, 'Joi', '14:00:00', 'L301', 13, '16:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (71, 29, 'Joi', '14:00:00', 'L336', 9, '16:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (72, 24, 'Vineri', '07:00:00', 'MOS-S15', 8, '08:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (73, 11, 'Vineri', '08:00:00', 'A313', 19, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (74, 1, 'Vineri', '10:00:00', 'L439', 23, '12:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (75, 1, 'Vineri', '10:00:00', 'L439', 23, '12:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (76, 1, 'Luni', '06:00:00', 'L339', 14, '08:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (77, 6, 'Marti', '08:00:00', 'L338', 5, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (78, 7, 'Marti', '08:00:00', 'L402', 4, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (79, 4, 'Miercuri', '14:00:00', 'C512', 3, '16:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (80, 11, 'Miercuri', '16:00:00', 'C310', 19, '18:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (81, 27, 'Joi', '10:00:00', 'L306', 13, '12:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (82, 24, 'Joi', '10:00:00', 'L439', 8, '12:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (83, 16, 'Joi', '12:00:00', 'L302', 19, '14:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (84, 23, 'Joi', '14:00:00', 'L338', 25, '16:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (85, 29, 'Joi', '16:00:00', 'L336', 9, '18:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (86, 1, 'Vineri', '06:00:00', 'L302', 14, '08:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (87, 9, 'Vineri', '06:00:00', 'L306', 18, '08:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (88, 9, 'Vineri', '08:00:00', 'L306', 18, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (89, 16, 'Vineri', '08:00:00', 'L336', 20, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (90, 11, 'Luni', '14:00:00', 'A312', 19, '16:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (91, 7, 'Marti', '08:00:00', 'L402', 4, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (92, 6, 'Marti', '12:00:00', 'L338', 5, '14:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (93, 1, 'Miercuri', '10:00:00', 'L001', 23, '12:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (94, 1, 'Miercuri', '10:00:00', 'L001', 23, '12:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (95, 9, 'Miercuri', '12:00:00', 'L002', 22, '14:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (96, 4, 'Miercuri', '14:00:00', 'C512', 3, '16:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (97, 27, 'Joi', '10:00:00', 'L306', 13, '12:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (98, 16, 'Joi', '10:00:00', 'L343', 19, '12:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (99, 29, 'Joi', '14:00:00', 'L439', 9, '16:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (100, 23, 'Joi', '16:00:00', 'L338', 25, '18:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (101, 24, 'Vineri', '07:00:00', 'MOS-S15', 8, '08:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (102, 9, 'Vineri', '12:00:00', 'L306', 18, '14:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (103, 16, 'Vineri', '12:00:00', 'L307', 26, '14:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (104, 11, 'Luni', '16:00:00', '6/II', 19, '18:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (105, 6, 'Marti', '08:00:00', 'L338', 5, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (106, 7, 'Marti', '08:00:00', 'L402', 4, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (107, 9, 'Marti', '12:00:00', 'L321', 22, '14:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (108, 9, 'Miercuri', '10:00:00', 'L402', 22, '12:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (109, 4, 'Miercuri', '16:00:00', 'C512', 3, '18:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (110, 16, 'Joi', '08:00:00', 'L002', 19, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (111, 24, 'Joi', '10:00:00', 'L439', 8, '12:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (112, 27, 'Joi', '14:00:00', 'L301', 13, '16:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (113, 29, 'Joi', '14:00:00', 'L439', 9, '16:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (114, 23, 'Joi', '16:00:00', 'L338', 25, '18:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (115, 16, 'Vineri', '06:00:00', 'L002', 26, '08:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (116, 1, 'Vineri', '08:00:00', 'L001', 23, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (117, 1, 'Vineri', '08:00:00', 'L001', 23, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (118, 11, 'Luni', '06:00:00', 'A312', 27, '08:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (119, 2, 'Luni', '08:00:00', '2/I', 15, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (120, 5, 'Marti', '06:00:00', 'C335', 4, '08:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (121, 6, 'Marti', '08:00:00', 'L338', 5, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (122, 8, 'Marti', '10:00:00', 'C335', 5, '12:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (123, 7, 'Marti', '10:00:00', 'L402', 4, '12:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (124, 16, 'Miercuri', '06:00:00', 'L320', 8, '08:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (125, 1, 'Miercuri', '06:00:00', 'L338', 16, '08:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (126, 16, 'Miercuri', '08:00:00', 'L320', 8, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (127, 1, 'Miercuri', '08:00:00', 'L439', 16, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (128, 30, 'Miercuri', '12:00:00', 'C335', 16, '14:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (129, 13, 'Joi', '06:00:00', 'C310', 7, '08:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (130, 14, 'Joi', '06:00:00', 'C335', 8, '08:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (131, 15, 'Joi', '06:00:00', 'C510', 9, '08:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (132, 23, 'Joi', '06:00:00', 'L338', 21, '08:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (133, 17, 'Joi', '06:00:00', 'L534', 10, '08:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (134, 18, 'Joi', '08:00:00', 'A303', 11, '09:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (135, 19, 'Joi', '08:00:00', 'C335', 12, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (136, 20, 'Joi', '08:00:00', 'L001', 10, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (137, 28, 'Joi', '08:00:00', 'L336', 7, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (138, 24, 'Joi', '08:00:00', 'L338', 8, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (139, 21, 'Joi', '08:00:00', 'L439', 9, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (140, 22, 'Joi', '09:00:00', 'A303', 11, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (141, 27, 'Joi', '10:00:00', 'L306', 13, '12:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (142, 25, 'Joi', '12:00:00', 'C310', 13, '14:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (143, 26, 'Joi', '12:00:00', 'C335', 9, '14:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (144, 31, 'Joi', '12:00:00', 'L338', 28, '14:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (145, 32, 'Joi', '14:00:00', 'C335', 17, '16:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (146, 29, 'Joi', '16:00:00', 'L336', 9, '18:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (147, 3, 'Vineri', '06:00:00', 'C335', 10, '08:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (148, 4, 'Vineri', '08:00:00', 'L534', 10, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (149, 9, 'Vineri', '10:00:00', 'L308', 29, '12:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (150, 9, 'Vineri', '14:00:00', 'L308', 29, '16:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (151, 11, 'Marti', '08:00:00', 'C512', 30, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (152, 6, 'Marti', '12:00:00', 'L338', 5, '14:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (153, 1, 'Miercuri', '06:00:00', 'L338', 16, '08:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (154, 1, 'Miercuri', '08:00:00', 'L439', 16, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (155, 27, 'Joi', '08:00:00', 'L001', 13, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (156, 28, 'Joi', '10:00:00', 'L302', 7, '12:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (157, 31, 'Joi', '12:00:00', 'L338', 28, '14:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (158, 4, 'Vineri', '08:00:00', 'L534', 10, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (159, 16, 'Vineri', '10:00:00', 'L336', 8, '12:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (160, 9, 'Vineri', '12:00:00', 'L308', 29, '14:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (161, 16, 'Vineri', '12:00:00', 'L339', 8, '14:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (162, 9, 'Vineri', '16:00:00', 'L002', 29, '18:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (163, 6, 'Marti', '08:00:00', 'L338', 5, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (164, 11, 'Marti', '12:00:00', 'C514', 30, '14:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (165, 9, 'Miercuri', '08:00:00', 'L002', 31, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (166, 16, 'Miercuri', '10:00:00', 'L336', 27, '12:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (167, 1, 'Miercuri', '14:00:00', 'L402', 16, '16:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (168, 1, 'Miercuri', '14:00:00', 'L402', 16, '16:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (169, 16, 'Miercuri', '16:00:00', 'L002', 32, '18:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (170, 28, 'Joi', '08:00:00', 'L336', 7, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (171, 27, 'Joi', '10:00:00', 'L306', 13, '12:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (172, 31, 'Joi', '16:00:00', 'L336', 28, '18:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (173, 4, 'Vineri', '10:00:00', 'L001', 10, '12:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (174, 9, 'Vineri', '16:00:00', 'L308', 33, '18:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (175, 9, 'Marti', '08:00:00', 'L002', 31, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (176, 6, 'Marti', '12:00:00', 'L338', 5, '14:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (177, 9, 'Marti', '14:00:00', 'L308', 31, '16:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (178, 11, 'Miercuri', '06:00:00', 'A321', 27, '08:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (179, 4, 'Miercuri', '08:00:00', 'A311', 10, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (180, 16, 'Miercuri', '14:00:00', 'L306', 32, '16:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (181, 16, 'Miercuri', '14:00:00', 'L321', 34, '16:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (182, 1, 'Miercuri', '16:00:00', 'L343', 16, '18:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (183, 1, 'Miercuri', '16:00:00', 'L343', 16, '18:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (184, 27, 'Joi', '08:00:00', 'L001', 13, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (185, 28, 'Joi', '10:00:00', 'L302', 7, '12:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (186, 31, 'Joi', '12:00:00', 'L338', 28, '14:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (187, 11, 'Luni', '12:00:00', 'C514', 30, '14:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (188, 6, 'Marti', '08:00:00', 'L338', 5, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (189, 9, 'Marti', '12:00:00', 'L002', 31, '14:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (190, 16, 'Marti', '14:00:00', 'L302', 15, '16:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (191, 9, 'Marti', '16:00:00', 'L439', 31, '18:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (192, 4, 'Miercuri', '08:00:00', 'A311', 10, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (193, 1, 'Miercuri', '16:00:00', 'L336', 35, '18:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (194, 1, 'Miercuri', '16:00:00', 'L336', 35, '18:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (195, 27, 'Joi', '08:00:00', 'L001', 13, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (196, 28, 'Joi', '08:00:00', 'L336', 7, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (197, 16, 'Joi', '10:00:00', 'L534', 30, '12:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (198, 31, 'Joi', '16:00:00', 'L001', 28, '18:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (199, 1, 'Luni', '14:00:00', 'L439', 36, '16:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (200, 1, 'Luni', '14:00:00', 'L439', 36, '16:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (201, 31, 'Luni', '16:00:00', 'L336', 28, '18:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (202, 16, 'Marti', '08:00:00', 'L336', 27, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (203, 6, 'Marti', '12:00:00', 'L338', 5, '14:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (204, 16, 'Marti', '16:00:00', 'L339', 15, '18:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (205, 4, 'Miercuri', '06:00:00', 'A311', 10, '08:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (206, 11, 'Miercuri', '08:00:00', 'A321', 27, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (207, 9, 'Miercuri', '16:00:00', 'L534', 31, '18:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (208, 28, 'Joi', '08:00:00', 'L336', 7, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (209, 27, 'Joi', '10:00:00', 'L306', 13, '12:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (210, 9, 'Vineri', '14:00:00', 'L339', 33, '16:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (211, 1, 'Luni', '16:00:00', 'L306', 36, '18:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (212, 1, 'Luni', '16:00:00', 'L336', 36, '18:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (213, 6, 'Marti', '08:00:00', 'L338', 5, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (214, 16, 'Marti', '10:00:00', 'L301', 30, '12:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (215, 11, 'Miercuri', '08:00:00', 'C510', 30, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (216, 9, 'Miercuri', '10:00:00', 'L002', 31, '12:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (217, 9, 'Miercuri', '14:00:00', 'L002', 31, '16:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (218, 27, 'Joi', '08:00:00', 'L001', 13, '10:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (219, 28, 'Joi', '10:00:00', 'L302', 7, '12:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (220, 16, 'Joi', '12:00:00', 'L301', 30, '14:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (221, 31, 'Joi', '16:00:00', 'L336', 28, '18:00:00');
+INSERT INTO courses.schedules (id, course_id, day, from_time, room, teacher_id, to_time) VALUES (222, 4, 'Vineri', '10:00:00', 'L001', 10, '12:00:00');
+INSERT INTO courses.subjects (id, name, teacher_id) VALUES (1, 'Limbaje formale si tehnici de compilare', 2);
+INSERT INTO courses.subjects (id, name, teacher_id) VALUES (2, 'Programare paralela si distribuita', 3);
+INSERT INTO courses.subjects (id, name, teacher_id) VALUES (3, 'Metode inteligente de rezolvare a problemelor reale', 4);
+INSERT INTO courses.subjects (id, name, teacher_id) VALUES (4, 'Automatizarea proceselor de business', 5);
+INSERT INTO courses.subjects (id, name, teacher_id) VALUES (5, 'Aplicatii ale geometriei in informatica', 6);
+INSERT INTO courses.subjects (id, name, teacher_id) VALUES (6, 'Realitate virtuala', 7);
+INSERT INTO courses.subjects (id, name, teacher_id) VALUES (7, 'Interactiunea om-calculator', 8);
+INSERT INTO courses.subjects (id, name, teacher_id) VALUES (8, 'Prelucrarea imaginilor', 9);
+INSERT INTO courses.subjects (id, name, teacher_id) VALUES (9, 'Aspecte pragmatice in programare', 10);
+INSERT INTO courses.subjects (id, name, teacher_id) VALUES (10, 'Instruire asistata de calculator', 11);
+INSERT INTO courses.subjects (id, name, teacher_id) VALUES (11, 'Securitate software', 12);
+INSERT INTO courses.subjects (id, name, teacher_id) VALUES (12, 'Procesarea datelor audio-video', 13);
+INSERT INTO courses.subjects (id, name, teacher_id) VALUES (13, 'Grafica pe calculator', 9);
+INSERT INTO courses.subjects (id, name, teacher_id) VALUES (14, 'Programare pentru dispozitive mobile', 14);
+INSERT INTO courses.subjects (id, name, teacher_id) VALUES (15, 'Limbaje formale si tehnici de compilare', 15);
+INSERT INTO courses.subjects (id, name, teacher_id) VALUES (16, 'Metode inteligente de rezolvare a problemelor reale', 4);
+INSERT INTO courses.subjects (id, name, teacher_id) VALUES (17, 'Automatizarea proceselor de business', 5);
+INSERT INTO courses.subjects (id, name, teacher_id) VALUES (18, 'Programare pentru dispozitive mobile', 16);
+INSERT INTO courses.subjects (id, name, teacher_id) VALUES (19, 'Realitate virtuala', 7);
+INSERT INTO courses.subjects (id, name, teacher_id) VALUES (20, 'Interactiunea om-calculator', 8);
+INSERT INTO courses.subjects (id, name, teacher_id) VALUES (21, 'Prelucrarea imaginilor', 9);
+INSERT INTO courses.subjects (id, name, teacher_id) VALUES (22, 'Aspecte pragmatice in programare', 10);
+INSERT INTO courses.subjects (id, name, teacher_id) VALUES (23, 'Instruire asistata de calculator', 11);
+INSERT INTO courses.subjects (id, name, teacher_id) VALUES (24, 'Securitate software', 12);
+INSERT INTO courses.subjects (id, name, teacher_id) VALUES (25, 'Procesarea datelor audio-video', 13);
+INSERT INTO courses.subjects (id, name, teacher_id) VALUES (26, 'Grafica pe calculator', 9);
+INSERT INTO courses.subjects (id, name, teacher_id) VALUES (27, 'Criptografie cu cheie publica', 17);
+INSERT INTO courses.subjects (id, name, teacher_id) VALUES (28, 'Programare paralela si distribuita', 10);

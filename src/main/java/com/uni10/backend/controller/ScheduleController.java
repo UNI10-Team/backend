@@ -22,7 +22,7 @@ import javax.validation.Valid;
 
 @Api(value = "ScheduleController")
 @RestController
-@RequestMapping("/courses/{courseId}/schedules")
+@RequestMapping("schedules")
 @AllArgsConstructor
 public class ScheduleController {
 
@@ -30,40 +30,36 @@ public class ScheduleController {
 
     @GetMapping
     @ApiOperation(value = "ScheduleController.findAll", notes = "Find all schedule")
-    public Page<ScheduleDTO> findAll(final ScheduleRequest scheduleRequest,
-                                     @PathVariable("courseId") final long courseId) {
-        return scheduleService.findAll(scheduleRequest, courseId);
+    public Page<ScheduleDTO> findAll(final ScheduleRequest scheduleRequest) {
+        return scheduleService.findAll(scheduleRequest);
     }
 
     @GetMapping("/{id}")
     @ApiOperation(value = "ScheduleController.findById", notes = "Find one schedule by id")
-    public ResponseEntity<ScheduleDTO> findById(@PathVariable("id") final long id,
-                                                @PathVariable("courseId") final long courseId) {
-        return ResponseEntity.ok(scheduleService.findById(id, courseId));
+    public ResponseEntity<ScheduleDTO> findById(@PathVariable("id") final long id) {
+        return ResponseEntity.of(scheduleService.findById(id));
     }
 
     @PostMapping
     @Secured({"ROLE_SUBJECT_TEACHER"})
     @ApiOperation(value = "ScheduleController.save", notes = "Save a new schedule")
-    public ResponseEntity<ScheduleDTO> save(@Valid @RequestBody final ScheduleDTO scheduleDTO,
-                                            @PathVariable("courseId") final long courseId) {
-        return ResponseEntity.ok(scheduleService.save(scheduleDTO, courseId));
+    public ResponseEntity<ScheduleDTO> save(@Valid @RequestBody final ScheduleDTO scheduleDTO) {
+        return ResponseEntity.ok(scheduleService.save(scheduleDTO));
     }
 
     @PutMapping("/{id}")
     @Secured({"ROLE_COURSE_TEACHER"})
     @ApiOperation(value = "ScheduleController.update", notes = "Update an existent schedule")
     public ResponseEntity<ScheduleDTO> update(@Valid @RequestBody final ScheduleDTO scheduleDTO,
-                                              @PathVariable("id") final long id,
-                                              @PathVariable("courseId") final long courseId) {
-        return ResponseEntity.ok(scheduleService.update(scheduleDTO, id, courseId));
+                                              @PathVariable("id") final long id) {
+        return ResponseEntity.ok(scheduleService.update(scheduleDTO, id));
     }
 
     @DeleteMapping("/{id}")
     @Secured({"ROLE_SUBJECT_TEACHER"})
     @ApiOperation(value = "ScheduleController.deleteById", notes = "Delete an existent schedule")
-    public ResponseEntity<Void> deleteById(@PathVariable("id") final long id, @PathVariable("courseId") final long courseId) {
-        scheduleService.deleteById(id, courseId);
+    public ResponseEntity<Void> deleteById(@PathVariable("id") final long id) {
+        scheduleService.deleteById(id);
         return ResponseEntity.ok().build();
     }
 }

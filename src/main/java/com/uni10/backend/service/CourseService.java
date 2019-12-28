@@ -1,22 +1,19 @@
 package com.uni10.backend.service;
 
 import com.uni10.backend.api.dto.CourseDTO;
-import com.uni10.backend.api.exceptions.ForbiddenException;
 import com.uni10.backend.api.exceptions.NotFoundException;
 import com.uni10.backend.api.requests.CourseRequest;
 import com.uni10.backend.entity.Course;
-import com.uni10.backend.entity.Schedule;
 import com.uni10.backend.repository.CourseRepository;
-import com.uni10.backend.security.SecurityService;
-import com.uni10.backend.specifications.Specifications;
 import lombok.AllArgsConstructor;
 import lombok.val;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+
 
 @Service
 @AllArgsConstructor
@@ -24,75 +21,53 @@ public class CourseService {
 
     private CourseRepository courseRepository;
 
-    public List<CourseDTO> findAll(final CourseRequest courseRequest, final long subjectId) {
+    public Page<CourseDTO> findAll(final CourseRequest courseRequest) {
+        final Pageable pageable = courseRequest.toPageable();
         final Specification<Course> specification = courseRequest.toSpecification();
-        return courseRepository.findAll(bySubjectId(subjectId).and(specification))
-                .stream()
-                .map(CourseService::courseDTO)
-                .collect(Collectors.toList());
+        return courseRepository.findAll(specification, pageable).map(CourseService::courseDTO);
     }
 
-    public CourseDTO findById(final long id, long subjectId) {
-        val optional = courseRepository.findById(id);
-        if (optional.isPresent() && optional.get().getSubjectId() == subjectId) {
-            return courseDTO(optional.get());
-        } else {
-            throw new NotFoundException("Course not found");
-        }
+    public Optional<CourseDTO> findById(final long id) {
+        return courseRepository.findById(id).map(CourseService::courseDTO);
     }
 
-    public CourseDTO save(CourseDTO courseDTO, long subjectId) {
-        Course course = course(courseDTO, subjectId);
+    public CourseDTO save(CourseDTO courseDTO) {
+        Course course = course(courseDTO);
         course = courseRepository.save(course);
         return courseDTO(course);
     }
 
-    public void deleteById(final long id, long subjectId) {
-        val optional = courseRepository.findById(id);
-        if (optional.isPresent() && optional.get().getSubjectId() == subjectId) {
-            Course course = optional.get();
-            if (course.getSubject().getTeacherId() == SecurityService.getPrincipal().getId()) {
-                courseRepository.delete(course);
-            }
-            else{
-                throw new ForbiddenException("Only the Subject teacher can perform this action");
-            }
+    public void deleteById(final long id) {
+        if (courseRepository.existsById(id)) {
+            courseRepository.deleteById(id);
         } else {
-            throw new NotFoundException("Course not found");
+            throw new NotFoundException();
         }
     }
 
-    public CourseDTO update(final CourseDTO courseDTO, long id, final long subjectId) {
-        val optional = courseRepository.findById(id);
-        if (optional.isPresent() && optional.get().getSubjectId() == subjectId) {
-            Course course = course(optional.get(), courseDTO);
-            course = courseRepository.save(course);
-            return courseDTO(course);
-        } else {
-            throw new NotFoundException("Course not found");
-        }
+    public CourseDTO update(final CourseDTO courseDTO, long id) {
+        val course = courseRepository.findById(id);
+        final Course updatedCourse = course(course.orElseThrow(NotFoundException::new), courseDTO);
+        courseRepository.save(updatedCourse);
+        return courseDTO(updatedCourse);
+
     }
 
-    private static Specification<Course> bySubjectId(final long subjectId) {
-        final String[] pathToSubject = {"subject", "id"};
-        return Specifications.equal(pathToSubject, subjectId);
-    }
-
-    private static CourseDTO courseDTO(final Course course){
+    private static CourseDTO courseDTO(final Course course) {
         return new CourseDTO()
                 .setId(course.getId())
                 .setSubjectId(course.getSubjectId())
                 .setType(course.getType());
     }
 
-    private static Course course(final CourseDTO courseDTO, final long subjectId){
+    private static Course course(final CourseDTO courseDTO) {
         return new Course()
                 .setId(0)
                 .setType(courseDTO.getType())
-                .setSubjectId(subjectId);
+                .setSubjectId(courseDTO.getSubjectId());
     }
 
-    private static Course course(final Course course, final CourseDTO courseDTO){
+    private static Course course(final Course course, final CourseDTO courseDTO) {
         return course
                 .setType(courseDTO.getType())
                 .setSubjectId(courseDTO.getSubjectId());

@@ -21,13 +21,13 @@ public class Schedule {
     private long id;
 
     @Column(name = "day")
-    private String day;
+    private int day;
 
-    @Column(name = "from_time")
-    private Time fromTime;
+    @Column(name = "start_at")
+    private Time startAt;
 
-    @Column(name = "to_time")
-    private Time toTime;
+    @Column(name = "end_at")
+    private Time endAt;
 
     @Column(name = "room")
     private String room;

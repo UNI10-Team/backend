@@ -14,25 +14,34 @@ import java.util.Set;
 
 @Getter
 public class ScheduleRequest extends PagedRequest implements Filter<Schedule> {
+
     @ApiParam(name = "day")
     private List<String> day = new ArrayList<>();
-    @ApiParam(name = "fromTime")
-    private List<String> fromTime = new ArrayList<>();
-    @ApiParam(name = "toTime")
-    private List<String> toTime = new ArrayList<>();
+
+    @ApiParam(name = "start")
+    private String start;
+
+    @ApiParam(name = "end")
+    private String end;
+
     @ApiParam(name = "room")
     private List<String> room = new ArrayList<>();
-    @ApiParam(name = "teacherId")
-    private List<String> teacherId = new ArrayList<>();
+
+    @ApiParam(name = "course")
+    private List<String> course = new ArrayList<>();
+
+    @ApiParam(name = "teacher")
+    private List<String> teacher = new ArrayList<>();
 
     @Override
     public Specification<Schedule> toSpecification() {
         Set<Specification<Schedule>> specifications = new HashSet<>();
         specifications.add(toSpecification("day", day));
-        specifications.add(toSpecification("fromTime", fromTime));
-        specifications.add(toSpecification("toTime", toTime));
+        specifications.add(toTimeSpecification("startAt", start));
+        specifications.add(toTimeSpecification("endAt", end));
         specifications.add(toSpecification("room", room));
-        specifications.add(toSpecification("teacherId", teacherId));
+        specifications.add(toSpecification("course_id", course));
+        specifications.add(toSpecification("teacher_id", teacher));
         return Specifications.and(specifications);
     }
 }

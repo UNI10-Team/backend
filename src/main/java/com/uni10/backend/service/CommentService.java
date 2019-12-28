@@ -1,14 +1,15 @@
 package com.uni10.backend.service;
 
 import com.uni10.backend.api.dto.CommentDTO;
+import com.uni10.backend.api.exceptions.NotFoundException;
 import com.uni10.backend.api.requests.CommentRequest;
 import com.uni10.backend.entity.Attachment;
 import com.uni10.backend.entity.Comment;
 import com.uni10.backend.repository.AttachmentRepository;
 import com.uni10.backend.repository.CommentRepository;
 import com.uni10.backend.specifications.Specifications;
-import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
+import lombok.val;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -23,41 +24,31 @@ import java.util.Set;
 public class CommentService {
 
     private CommentRepository commentRepository;
-    private AttachmentRepository attachmentRepository;
 
-    public Page<CommentDTO> findAll(final CommentRequest commentRequest, final long attachmentId) {
-        if (attachmentRepository.existsById(attachmentId)) {
-            String[] pathToAttachment = {"attachmentId"};
-            final Pageable pageable = commentRequest.toPageable();
-            final Specification<Comment> specification = Specifications.equal(pathToAttachment, attachmentId);
-            return commentRepository.findAll(specification, pageable).map(CommentService::commentDTO);
-        } else {
-            throw new RuntimeException();
-        }
+    public Page<CommentDTO> findAll(final CommentRequest commentRequest) {
+        final Pageable pageable = commentRequest.toPageable();
+        return commentRepository.findAll(pageable).map(CommentService::commentDTO);
     }
 
-    public Optional<CommentDTO> save(final CommentDTO commentDTO, final long attachmentId) {
-        if (attachmentRepository.existsById(attachmentId)) {
-            Comment comment = comment(commentDTO, 0);
-            comment = commentRepository.save(comment);
-            return Optional.of(commentDTO(comment));
-        } else {
-            return Optional.empty();
-        }
+    public CommentDTO save(final CommentDTO commentDTO) {
+        Comment comment = comment(commentDTO);
+        comment = commentRepository.save(comment);
+        return commentDTO(comment);
     }
 
-    public Optional<CommentDTO> update(final CommentDTO commentDTO, final long id) {
+    public CommentDTO update(final CommentDTO commentDTO, final long id) {
+        val optional = commentRepository.findById(id);
+        Comment comment = comment(optional.orElseThrow(NotFoundException::new), commentDTO);
+        comment = commentRepository.save(comment);
+        return commentDTO(comment);
+    }
+
+    public void deleteById(final long id) {
         if (commentRepository.existsById(id)) {
-            Comment comment = comment(commentDTO, id);
-            comment = commentRepository.save(comment);
-            return Optional.of(commentDTO(comment));
+            commentRepository.deleteById(id);
         } else {
-            return Optional.empty();
+            throw new NotFoundException();
         }
-    }
-
-    public void deleteById(final Long id) {
-        commentRepository.deleteById(id);
     }
 
     private static CommentDTO commentDTO(final Comment comment) {
@@ -68,11 +59,16 @@ public class CommentService {
                 .setAttachmentId(comment.getAttachmentId());
     }
 
-    private static Comment comment(final CommentDTO commentDTO, final long id) {
+    private static Comment comment(final CommentDTO commentDTO) {
         return new Comment()
-                .setId(id)
+                .setId(0)
                 .setText(commentDTO.getText())
                 .setUserId(commentDTO.getUserId())
                 .setAttachmentId(commentDTO.getAttachmentId());
+    }
+
+    private static Comment comment(final Comment comment, final CommentDTO commentDTO) {
+        return comment
+                .setText(commentDTO.getText());
     }
 }

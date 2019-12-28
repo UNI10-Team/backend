@@ -7,11 +7,11 @@ import org.springframework.data.jpa.domain.Specification;
 
 @Data
 @AllArgsConstructor
-public class FilterCriteria<T> {
+public class FilterCriteria<T, S extends Comparable<S>> {
 
     private String field;
     private Operator operator;
-    private String value;
+    private S value;
 
     public Specification<T> toSpecification(){
         final String[] fullPath = field.split("_");
@@ -30,7 +30,7 @@ public class FilterCriteria<T> {
             case GREATER_OR_EQUAL:
                 return Specifications.greaterThanOrEqualTo(fullPath, value);
             case LIKE:
-                return Specifications.like(fullPath, value);
+                return Specifications.like(fullPath, value.toString());
             default:
                 return Specifications.conjunction();
 

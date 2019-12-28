@@ -1,3 +1,0 @@
-INSERT INTO users.users (id, email, password, role, username, first_name, last_name) VALUES (1, 'csir2281@scs.ubbcluj.ro', '$2a$10$yQyOYOLcQHHGqkMrl3ctSOZ.cg8lRvsRNXLO6Lxzban2ixHvpo21u', 0, 'csir2281', 'Silviu-Mihnea', 'Cucuiet');
-INSERT INTO users.users (id, email, password, role, username, first_name, last_name) VALUES (2, 'fbir2234@scs.ubbcluj.ro', '$2a$10$.YmueZHNNROF2OmVU1flxehG7.uJD3lsyv0LDryr/OtKsyXCO9Gqy', 0, 'fbir2234', 'Florin', 'Buha');
-INSERT INTO users.users (id, email, password, role, username, first_name, last_name) VALUES (3, 'uni10@scs.ubbcluj.ro', '$2a$10$bGyUHvMHDmbG4e/skSAQU.JgimPvsN.xnIkNuvf8dH4yyYXG1r0EO', 2, 'uni10', 'UNI10', 'ADMIN');

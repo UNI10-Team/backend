@@ -13,11 +13,11 @@ public class ScheduleDTO {
 
     private long id;
 
-    private String day;
+    private int day;
 
-    private Time fromTime;
+    private Time startAt;
 
-    private Time toTime;
+    private Time endAt;
 
     private String room;
 
