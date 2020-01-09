@@ -29,6 +29,8 @@ public class Subject {
     @JoinColumn(name = "teacher_id", insertable = false, updatable = false)
     private User teacher;
 
+    private int year;
+
     @OneToMany(mappedBy = "subject", fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude

@@ -21,11 +21,15 @@ public class SubjectRequest extends PagedRequest implements Filter<Subject> {
     @ApiParam(name = "teacherId")
     private List<String> teacherId = new ArrayList<>();
 
+    @ApiParam(name = "year")
+    private List<String> year = new ArrayList<>();
+
     @Override
     public Specification<Subject> toSpecification() {
         Set<Specification<Subject>> specifications = new HashSet<>();
         specifications.add(toSpecification("name", name));
         specifications.add(toSpecification("teacher_id", teacherId));
+        specifications.add(toSpecification("year", year));
         return Specifications.and(specifications);
     }
 }

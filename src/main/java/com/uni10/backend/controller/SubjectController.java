@@ -3,6 +3,8 @@ package com.uni10.backend.controller;
 
 import com.uni10.backend.api.dto.SubjectDTO;
 import com.uni10.backend.api.requests.SubjectRequest;
+import com.uni10.backend.security.SecurityService;
+import com.uni10.backend.service.EnrollService;
 import com.uni10.backend.service.SubjectService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Api(value = "SubjectController")
 @RestController
@@ -28,11 +31,20 @@ import javax.validation.Valid;
 public class SubjectController {
 
     private SubjectService subjectService;
+    private EnrollService enrollService;
+    private SecurityService securityService;
 
     @GetMapping
     @ApiOperation(value = "SubjectController.findAll", notes = "Find all Subjects")
     public ResponseEntity<Page<SubjectDTO>> findAll(final SubjectRequest personRequest) {
         return ResponseEntity.ok(subjectService.findAll(personRequest));
+    }
+
+    @GetMapping("/user")
+    @ApiOperation(value = "SubjectController.findAll", notes = "Find all Subjects")
+    public ResponseEntity<List<SubjectDTO>> findAll() {
+        final long id = securityService.getCurrentUser().getId();
+        return ResponseEntity.ok(enrollService.findAll(id));
     }
 
     @GetMapping("/{id:[0-9]+}")

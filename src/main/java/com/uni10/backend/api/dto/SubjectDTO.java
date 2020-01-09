@@ -14,4 +14,6 @@ public class SubjectDTO {
     private String name;
 
     private long teacherId;
+
+    private int year;
 }
