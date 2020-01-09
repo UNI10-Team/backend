@@ -55,20 +55,23 @@ public class SubjectService {
         return new SubjectDTO()
                 .setId(subject.getId())
                 .setName(subject.getName())
-                .setTeacherId(subject.getTeacherId());
+                .setTeacherId(subject.getTeacherId())
+                .setYear(subject.getYear());
     }
 
     private static Subject subject(final SubjectDTO subjectDTO) {
         return new Subject()
                 .setId(0)
                 .setName(subjectDTO.getName())
-                .setTeacherId(subjectDTO.getTeacherId());
+                .setTeacherId(subjectDTO.getTeacherId())
+                .setYear(subjectDTO.getYear());
     }
 
     private static Subject subject(final Subject subject, final SubjectDTO subjectDTO) {
         return subject
                 .setName(subjectDTO.getName())
-                .setTeacherId(subjectDTO.getTeacherId());
+                .setTeacherId(subjectDTO.getTeacherId())
+                .setYear(subjectDTO.getYear());
     }
 }
 
