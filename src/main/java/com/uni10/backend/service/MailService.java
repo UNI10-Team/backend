@@ -1,12 +1,10 @@
 package com.uni10.backend.service;
 
-import com.uni10.backend.entity.Sender;
+import com.uni10.backend.mail.Sender;
 import com.uni10.backend.entity.Subject;
 import com.uni10.backend.entity.User;
 import com.uni10.backend.security.SecurityService;
 import lombok.AllArgsConstructor;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
 
 @Service

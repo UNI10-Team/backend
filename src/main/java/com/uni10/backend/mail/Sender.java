@@ -1,4 +1,4 @@
-package com.uni10.backend.entity;
+package com.uni10.backend.mail;
 
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.SimpleMailMessage;
@@ -35,7 +35,6 @@ public class Sender {
         mailSender.send(message);
     }
 
-    @PostConstruct
     public void sendMessageWithAttachments(String to, String subject, String text) throws MessagingException {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
