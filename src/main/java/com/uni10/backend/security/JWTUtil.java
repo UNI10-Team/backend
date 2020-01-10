@@ -1,65 +1,55 @@
 package com.uni10.backend.security;
 
+import com.uni10.backend.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Component
 public class JWTUtil {
 
+    public static final String ROLES = "ROLES";
+
     @Value("${jwt.secret}")
     private String secret;
 
-    @Autowired
-    public void getSecret() {
-        System.out.println(secret);;
-    }
-
-    public String extractUsername(String token) {
-        return extractClaims(token, Claims::getSubject);
-    }
-
-    public Date extractExpirationDate(String token) {
-        return extractClaims(token, Claims::getExpiration);
-    }
-
-    private   <T> T extractClaims(String token, Function<Claims, T> claimsResolver) {
+    public UserInfo extractUser(final String token) {
         final Claims claims = extractAllClaims(token);
-        return claimsResolver.apply(claims);
+        final User user = new User().setUsername(claims.getSubject());
+        return new UserInfo(user);
     }
 
-    private  Claims extractAllClaims(String token) {
+    private Claims extractAllClaims(String token) {
         return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
     }
 
-    public boolean isTokenExpired(String token){
-        return extractExpirationDate(token).before(new Date());
-    }
-
-    public  String generateToken(UserDetails userDetails){
-        Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, userDetails.getUsername());
-    }
-
-    private  String createToken(Map<String, Object> claims, String username) {
-        final Date now = new Date();
-        final Date expirationDate = new Date(System.currentTimeMillis() + 365 * 60 * 60 * 1000);
-
+    public String generateToken(UserDetails userDetails) {
+        final Instant now = Instant.now();
+        final Instant expiration = now.plusSeconds(10 * 60 * 60);
+        val authorities = userDetails.getAuthorities()
+                .stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
         return Jwts.builder()
-                .setClaims(claims)
-                .setSubject(username)
-                .setIssuedAt(now)
-                .setExpiration(expirationDate)
-                .signWith(SignatureAlgorithm.HS256, secret).compact();
+                .claim(ROLES, authorities)
+                .setSubject(userDetails.getUsername())
+                .setIssuedAt(Date.from(now))
+                .setExpiration(Date.from(expiration))
+                .signWith(SignatureAlgorithm.HS256, secret)
+                .compact();
     }
 
 }

@@ -5,7 +5,6 @@ import com.uni10.backend.entity.User;
 import com.uni10.backend.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.var;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,7 +15,7 @@ import org.springframework.stereotype.Component;
 public class SecurityService implements UserDetailsService {
 
     private UserRepository userRepository;
-    private final ThreadLocal<User> actingUser = new ThreadLocal<>();
+    private final ThreadLocal<UserInfo> actingUser = new ThreadLocal<>();
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -24,17 +23,14 @@ public class SecurityService implements UserDetailsService {
         if (!optional.isPresent()) {
             throw new UsernameNotFoundException(username);
         }
-        final User user = optional.get();
-        actingUser.set(user);
-        return new UserInfo(user);
+        return new UserInfo(optional.get());
     }
 
-    public static UserInfo getPrincipal(){
-        return (UserInfo) SecurityContextHolder.getContext()
-                .getAuthentication().getPrincipal();
+    public void setCurrentUser(UserInfo userInfo){
+        actingUser.set(userInfo);
     }
 
-    public User getCurrentUser(){
+    public UserInfo getCurrentUser(){
         return actingUser.get();
     }
 

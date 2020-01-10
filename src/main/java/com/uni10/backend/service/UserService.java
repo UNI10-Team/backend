@@ -4,7 +4,9 @@ import com.uni10.backend.api.dto.UserDTO;
 import com.uni10.backend.entity.User;
 import com.uni10.backend.repository.UserRepository;
 import com.uni10.backend.security.SecurityService;
+import com.uni10.backend.security.UserInfo;
 import lombok.AllArgsConstructor;
+import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -37,7 +39,8 @@ public class UserService {
     }
 
     public UserDTO getCurrentUser() {
-        return userDTO(securityService.getCurrentUser());
+        val user = userRepository.findById(securityService.getCurrentUser().getId());
+        return userDTO(user.get());
     }
 
     private static UserDTO userDTO(final User user) {

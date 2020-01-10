@@ -1,5 +1,6 @@
 package com.uni10.backend.security;
 
+import com.uni10.backend.entity.Role;
 import com.uni10.backend.entity.User;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -30,6 +31,14 @@ public class UserInfo implements UserDetails {
     @Override
     public String getUsername() {
         return user.getUsername();
+    }
+
+    public String getEmail() {
+        return user.getEmail();
+    }
+
+    public Role getRole() {
+        return user.getRole();
     }
 
     @Override
