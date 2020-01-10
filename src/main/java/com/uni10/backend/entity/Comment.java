@@ -24,6 +24,9 @@ public class Comment {
     @Column(name = "user_id")
     private long userId;
 
+    @Column(name = "isAccepted")
+    private boolean isAccepted;
+
     @ManyToOne
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
     @EqualsAndHashCode.Exclude

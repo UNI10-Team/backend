@@ -2,20 +2,15 @@ package com.uni10.backend.controller;
 
 import com.uni10.backend.api.dto.CommentDTO;
 import com.uni10.backend.api.requests.CommentRequest;
-import com.uni10.backend.api.requests.SubjectRequest;
-import com.uni10.backend.entity.Comment;
 import com.uni10.backend.service.CommentService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
-import lombok.val;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.Set;
 
 @Api(value = "SubjectController")
 @RestController

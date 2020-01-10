@@ -5,6 +5,8 @@ import com.uni10.backend.api.exceptions.NotFoundException;
 import com.uni10.backend.api.requests.CommentRequest;
 import com.uni10.backend.entity.Attachment;
 import com.uni10.backend.entity.Comment;
+import com.uni10.backend.entity.Subject;
+import com.uni10.backend.entity.User;
 import com.uni10.backend.repository.AttachmentRepository;
 import com.uni10.backend.repository.CommentRepository;
 import com.uni10.backend.specifications.Specifications;
@@ -24,15 +26,20 @@ import java.util.Set;
 public class CommentService {
 
     private CommentRepository commentRepository;
+    private MailService mailService;
 
     public Page<CommentDTO> findAll(final CommentRequest commentRequest) {
         final Pageable pageable = commentRequest.toPageable();
         return commentRepository.findAll(pageable).map(CommentService::commentDTO);
     }
 
-    public CommentDTO save(final CommentDTO commentDTO) {
+    public CommentDTO save(CommentDTO commentDTO) {
         Comment comment = comment(commentDTO);
+        comment.setAccepted(false);
         comment = commentRepository.save(comment);
+        Attachment att = comment.getAttachment();
+        Subject subject = att.course().getSubject();
+        mailService.sendNewCommentMail(0,subject,"en");
         return commentDTO(comment);
     }
 
@@ -49,6 +56,13 @@ public class CommentService {
         } else {
             throw new NotFoundException();
         }
+    }
+
+    public CommentDTO acceptComment(CommentDTO commentDTO){
+        Comment comment = comment(commentDTO);
+        comment.setAccepted(true);
+        comment = commentRepository.save(comment);
+        return commentDTO(comment);
     }
 
     private static CommentDTO commentDTO(final Comment comment) {
