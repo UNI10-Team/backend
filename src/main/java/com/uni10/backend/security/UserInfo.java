@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 public class UserInfo implements UserDetails {
@@ -20,7 +21,7 @@ public class UserInfo implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return user.getRole().getChildren();
+        return Collections.singletonList(user.getRole());
     }
 
     @Override
