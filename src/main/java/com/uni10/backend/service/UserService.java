@@ -39,8 +39,8 @@ public class UserService {
     }
 
     public UserDTO getCurrentUser() {
-        val user = userRepository.findById(securityService.getCurrentUser().getId());
-        return userDTO(user.get());
+        val user = userRepository.findByUsername(securityService.getCurrentUser().getUsername());
+        return userDTO(user);
     }
 
     private static UserDTO userDTO(final User user) {
