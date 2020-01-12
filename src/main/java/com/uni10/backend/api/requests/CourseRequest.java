@@ -17,14 +17,14 @@ public class CourseRequest extends PagedRequest implements Filter<Course> {
     @ApiParam(name = "type")
     private String type;
 
-    @ApiParam(name = "subject")
-    private List<String> subject = new ArrayList<>();
+    @ApiParam(name = "subjectId")
+    private List<String> subjectId = new ArrayList<>();
 
     @Override
     public Specification<Course> toSpecification() {
         Set<Specification<Course>> specifications = new HashSet<>();
         specifications.add(toSpecification("type", type));
-        specifications.add(toSpecification("subject", subject));
+        specifications.add(toSpecification("subject_id", subjectId));
         return Specifications.and(specifications);
     }
 }
