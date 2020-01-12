@@ -31,7 +31,6 @@ public class JWTRequestFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException, ExpiredJwtException, SignatureException {
 
-
         if (!request.getRequestURI().equals("/authenticate")) {
             final String authorization = request.getHeader("Authorization");
             if (authorization != null) {

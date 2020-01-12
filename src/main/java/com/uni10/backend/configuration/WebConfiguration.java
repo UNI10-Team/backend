@@ -33,6 +33,7 @@ public class WebConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
+                .cors().and()
                 .authorizeRequests()
                 .antMatchers("/authenticate").permitAll()
                 .antMatchers("/register").permitAll()
@@ -83,7 +84,12 @@ public class WebConfiguration extends WebSecurityConfigurerAdapter {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**");
+                registry.addMapping("/**")
+                        .allowedOrigins("*")
+                        .allowedMethods("GET", "POST","PUT", "DELETE", "PATCH")
+                        .allowedHeaders("Authorization", "Content-type")
+                        .allowCredentials(false)
+                        .maxAge(3600);
             }
         };
     }
