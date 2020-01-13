@@ -26,20 +26,17 @@ import java.util.Set;
 public class CommentService {
 
     private CommentRepository commentRepository;
-    private MailService mailService;
 
     public Page<CommentDTO> findAll(final CommentRequest commentRequest) {
         final Pageable pageable = commentRequest.toPageable();
-        return commentRepository.findAll(pageable).map(CommentService::commentDTO);
+        final Specification<Comment> specification = commentRequest.toSpecification();
+        return commentRepository.findAll(specification, pageable).map(CommentService::commentDTO);
     }
 
     public CommentDTO save(CommentDTO commentDTO) {
         Comment comment = comment(commentDTO);
         comment.setAccepted(false);
         comment = commentRepository.save(comment);
-        Attachment att = comment.getAttachment();
-        Subject subject = att.course().getSubject();
-        mailService.sendNewCommentMail(0,subject,"en");
         return commentDTO(comment);
     }
 
@@ -56,15 +53,6 @@ public class CommentService {
         } else {
             throw new NotFoundException();
         }
-    }
-
-    public CommentDTO acceptComment(final long id){
-        val optional = commentRepository.findById(id);
-        Comment comment = optional.get();
-        comment.setAccepted(true);
-        comment = commentRepository.save(comment);
-        mailService.sendNewAcceptMail(comment.getUser(),"en");
-        return commentDTO(comment);
     }
 
     private static CommentDTO commentDTO(final Comment comment) {

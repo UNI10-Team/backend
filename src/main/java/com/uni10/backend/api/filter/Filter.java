@@ -57,15 +57,23 @@ public interface Filter<T> {
         if (value == null || "".equals(value)) {
             return null;
         }
-        return toCriteria(key, value, true).toSpecification();
+        return toTimeCriteria(key, value).toSpecification();
     }
 
-    default FilterCriteria<T, Date> toCriteria(final String key, final String value, boolean time) {
+    default Specification<T> toBoolSpecification(final String key, final boolean value) {
+        return toBoolCriteria(key, value).toSpecification();
+    }
+
+    default FilterCriteria<T, Date> toTimeCriteria(final String key, final String value) {
         final String[] args = value.split("=");
         final Operator operator = Operator.fromSimpleFormat((args.length == 2) ? args[0] : "");
         final String realValue = (args.length == 2) ? args[1] : args[0];
         final Date date = Time.valueOf(realValue);
         return new FilterCriteria<>(key, operator, date);
+    }
+
+    default FilterCriteria<T, Boolean> toBoolCriteria(final String key, final boolean value) {
+        return new FilterCriteria<>(key, Operator.EQUAL, value);
     }
 
     default FilterCriteria<T, String> toCriteria(final String key, final String value) {

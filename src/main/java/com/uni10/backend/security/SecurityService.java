@@ -1,6 +1,7 @@
 package com.uni10.backend.security;
 
 
+import com.uni10.backend.entity.Role;
 import com.uni10.backend.entity.User;
 import com.uni10.backend.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -32,6 +33,10 @@ public class SecurityService implements UserDetailsService {
 
     public UserInfo getCurrentUser(){
         return actingUser.get();
+    }
+
+    public boolean isUserInRole(final Role role){
+        return actingUser.get().getRole() == role;
     }
 
 }

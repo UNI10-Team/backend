@@ -16,8 +16,10 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -25,8 +27,11 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Time;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -36,14 +41,18 @@ import java.util.stream.Collectors;
  */
 
 /*
-// @Component
+@Component
 @AllArgsConstructor
 public class HttpParserRunner implements CommandLineRunner {
 
+    private static final String I1_URL = "http://www.cs.ubbcluj.ro/files/orar/2019-1/tabelar/I1.html";
+    private static final String I2_URL = "http://www.cs.ubbcluj.ro/files/orar/2019-1/tabelar/I2.html";
     private static final String I3_URL = "http://www.cs.ubbcluj.ro/files/orar/2019-1/tabelar/I3.html";
+    private static final String IE1_URL = "http://www.cs.ubbcluj.ro/files/orar/2019-1/tabelar/IE1.html";
+    private static final String IE2_URL = "http://www.cs.ubbcluj.ro/files/orar/2019-1/tabelar/IE2.html";
     private static final String IE3_URL = "http://www.cs.ubbcluj.ro/files/orar/2019-1/tabelar/IE3.html";
 
-    private static final String FILE = "C:\\Users\\cucuis\\personal\\university\\pc\\backend\\src\\main\\resources\\subjects.csv";
+    private static final String FILE = "src\\main\\resources\\subjects_1.csv";
 
     private UserRepository userRepository;
     private CourseRepository courseRepository;
@@ -68,33 +77,26 @@ public class HttpParserRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        users();
-        System.out.println("USERS");
-        System.out.println("USERS");
-        System.out.println("USERS");
-        System.out.println("USERS");
-        System.out.println("USERS");
-        subjects();
-        System.out.println("SUBJECTS");
-        System.out.println("SUBJECTS");
-        System.out.println("SUBJECTS");
-        System.out.println("SUBJECTS");
-        System.out.println("SUBJECTS");
-        courses();
-        System.out.println("COURSES");
-        System.out.println("COURSES");
-        System.out.println("COURSES");
-        System.out.println("COURSES");
-        System.out.println("COURSES");
-        schedules();
-        System.out.println("SCHEDULES");
-        System.out.println("SCHEDULES");
-        System.out.println("SCHEDULES");
-        System.out.println("SCHEDULES");
-        System.out.println("SCHEDULES");
     }
 
+    private void _run() throws Exception {
+        //writeToFiles();
+        users();
+        subjects();
+        courses();
+        schedules();
+    }
+
+    private final List<_Subject> parsedSubjects = new ArrayList<>();
+
     private List<_Subject> _subjects() {
+        if (parsedSubjects.size() == 0) {
+            parsedSubjects.addAll(parseSubjects());
+        }
+        return parsedSubjects;
+    }
+
+    private List<_Subject> parseSubjects() {
         List<_Subject> subjects = new LinkedList<>();
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(FILE))) {
             String line = bufferedReader.readLine();
@@ -120,29 +122,28 @@ public class HttpParserRunner implements CommandLineRunner {
 
     private void users() {
         List<_Subject> subjects = _subjects();
-        List<User> subjectTeachers = subjects.stream()
+        Set<String> existingUsers = userRepository.findAll()
+                .stream()
+                .map(User::getUsername)
+                .collect(Collectors.toSet());
+
+
+        Set<String> subjectTeachers = subjects.stream()
                 .filter(subject -> subject.getType().equalsIgnoreCase("Curs"))
                 .map(_Subject::getTeacher)
-                .distinct()
-                .map(teacher -> createUser(teacher, Role.ROLE_SUBJECT_TEACHER))
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
 
-        userRepository.save(new User()
-                .setFirstName("UNI10")
-                .setLastName("TEAM")
-                .setUsername("uni10")
-                .setEmail("uni10@scs.ubbcluj.ro")
-                .setRole(Role.ROLE_ADMIN)
-                .setPassword(bCryptPasswordEncoder.encode("pass")));
-        userRepository.saveAll(subjectTeachers);
-        List<User> courseTeachers = subjects.stream()
+        Set<String> courseTeachers = subjects.stream()
                 .filter(subject -> !subject.getType().equals("Curs"))
-                .filter(subject -> (userRepository.findByUsername(subject.getTeacher()) == null))
                 .map(_Subject::getTeacher)
-                .distinct()
-                .map(teacher -> createUser(teacher, Role.ROLE_COURSE_TEACHER))
-                .collect(Collectors.toList());
-        userRepository.saveAll(courseTeachers);
+                .collect(Collectors.toSet());
+
+        subjectTeachers.removeAll(existingUsers);
+        courseTeachers.removeAll(existingUsers);
+        courseTeachers.removeAll(subjectTeachers);
+
+        userRepository.saveAll(subjectTeachers.stream().map(user -> createUser(user, Role.ROLE_SUBJECT_TEACHER)).collect(Collectors.toList()));
+        userRepository.saveAll(courseTeachers.stream().map(user -> createUser(user, Role.ROLE_COURSE_TEACHER)).collect(Collectors.toList()));
     }
 
     private void subjects() {
@@ -171,11 +172,28 @@ public class HttpParserRunner implements CommandLineRunner {
 
     }
 
-    private Schedule schedule(_Subject subject){
+    private static int getDay(String day) {
+        switch (day) {
+            case "Luni":
+                return 1;
+            case "Marti":
+                return 2;
+            case "Miercuri":
+                return 3;
+            case "Joi":
+                return 4;
+            case "Vineri":
+                return 5;
+            default:
+                return 0;
+        }
+    }
+
+    private Schedule schedule(_Subject subject) {
         Time from = Time.valueOf(subject.getTime().substring(0, 2) + ":00:00");
         Time to = Time.valueOf(subject.getTime().substring(3) + ":00:00");
         return new Schedule()
-                .setDay(subject.getDay())
+                .setDay(getDay(subject.getDay()))
                 .setRoom(subject.getRoom())
                 .setTeacherId(userRepository.findByUsername(subject.getTeacher()).getId())
                 .setCourseId(course(subject.getType(), subject.getName()).getId())
@@ -199,15 +217,14 @@ public class HttpParserRunner implements CommandLineRunner {
 
 
     private void writeToFiles() throws Exception {
-        List<_Subject> subjects = get_Subjects(I3_URL);
-        subjects.addAll(get_Subjects(IE3_URL));
+        List<_Subject> subjects = get_Subjects(I1_URL);
+        subjects.addAll(get_Subjects(IE1_URL));
 
         subjects = subjects.stream()
                 .filter(subject -> !subject.getName().equals("Practica pedagogica observativa"))
                 .filter(subject -> !subject.getName().equals("Proiect colectiv"))
                 .collect(Collectors.toList());
         create(FILE);
-        System.out.println(subjects);
         System.out.println(subjects.size());
         for (_Subject subject : subjects) {
             writeInCSV(FILE, subject.getDay(),
@@ -223,7 +240,7 @@ public class HttpParserRunner implements CommandLineRunner {
     }
 
 
-    public static void writeInCSV(String filename, Object... cells) throws Exception {
+    private static void writeInCSV(String filename, Object... cells) throws Exception {
         BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true));
         writer.write(cells[0].toString());
         for (int i = 1; i < cells.length; i++) {
@@ -233,7 +250,7 @@ public class HttpParserRunner implements CommandLineRunner {
         writer.close();
     }
 
-    public static void create(String filename) throws Exception {
+    private static void create(String filename) throws Exception {
         new BufferedWriter(new FileWriter(filename)).close();
     }
 
@@ -273,7 +290,7 @@ public class HttpParserRunner implements CommandLineRunner {
     private User createUser(final String fullName, final Role role) {
         String[] names = fullName.split(" ");
         String lastName = names[0];
-        String firstName = names[1];
+        String firstName = fullName.substring(lastName.length() + 1);
         String email = firstName + "." + lastName + "@scs.ubbcluj.ro";
         return new User()
                 .setFirstName(firstName)
