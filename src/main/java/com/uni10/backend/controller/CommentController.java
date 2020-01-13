@@ -43,4 +43,12 @@ public class CommentController {
         commentService.deleteById(id);
         return ResponseEntity.ok().build();
     }
+
+    @PutMapping("/{id}")
+    @ApiOperation(value = "CommentController.accept", notes = "Accept a comment")
+    public ResponseEntity<CommentDTO> accept(@PathVariable long id) {
+        return ResponseEntity.ok(commentService.acceptComment(id));
+    }
+
+
 }

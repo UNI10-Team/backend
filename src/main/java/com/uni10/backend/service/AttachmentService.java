@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 public class AttachmentService {
 
     private AttachmentRepository attachmentRepository;
+    private MailService mailService;
+    private EnrollService enrollService;
 
     public Page<Attachment> findAll(final AttachmentRequest attachmentRequest) {
         return attachmentRepository.findAll(PageRequest.of(0, 5));
@@ -22,6 +24,8 @@ public class AttachmentService {
     public AttachmentDTO save(final AttachmentDTO attachmentDTO){
         Attachment attachment = attachment(attachmentDTO);
         attachment = attachmentRepository.save(attachment);
+        //sends email to the students enrolled
+        mailService.sendNewAttachmentMail(enrollService.getAllStudent(attachment.course().getSubjectId()),"en");
         return attachmentDTO(attachment);
     }
 

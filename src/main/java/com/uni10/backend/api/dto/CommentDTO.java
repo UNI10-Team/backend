@@ -17,4 +17,6 @@ public class CommentDTO {
 
     private long attachmentId;
 
+    private boolean isAccepted;
+
 }

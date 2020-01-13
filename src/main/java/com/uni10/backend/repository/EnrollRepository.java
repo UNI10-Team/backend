@@ -8,4 +8,5 @@ import java.util.List;
 public interface EnrollRepository extends JpaRepository<Enroll, Enroll.EnrollId> {
 
     List<Enroll> findAllByStudentId(long student_id);
+    List<Enroll> findAllBySubjectId(long subject_id);
 }

@@ -58,10 +58,12 @@ public class CommentService {
         }
     }
 
-    public CommentDTO acceptComment(CommentDTO commentDTO){
-        Comment comment = comment(commentDTO);
+    public CommentDTO acceptComment(final long id){
+        val optional = commentRepository.findById(id);
+        Comment comment = optional.get();
         comment.setAccepted(true);
         comment = commentRepository.save(comment);
+        mailService.sendNewAcceptMail(comment.getUser(),"en");
         return commentDTO(comment);
     }
 
@@ -70,7 +72,8 @@ public class CommentService {
                 .setId(comment.getId())
                 .setText(comment.getText())
                 .setUserId(comment.getUserId())
-                .setAttachmentId(comment.getAttachmentId());
+                .setAttachmentId(comment.getAttachmentId())
+                .setAccepted(comment.isAccepted());
     }
 
     private static Comment comment(final CommentDTO commentDTO) {
@@ -78,7 +81,8 @@ public class CommentService {
                 .setId(0)
                 .setText(commentDTO.getText())
                 .setUserId(commentDTO.getUserId())
-                .setAttachmentId(commentDTO.getAttachmentId());
+                .setAttachmentId(commentDTO.getAttachmentId())
+                .setAccepted(commentDTO.isAccepted());
     }
 
     private static Comment comment(final Comment comment, final CommentDTO commentDTO) {
