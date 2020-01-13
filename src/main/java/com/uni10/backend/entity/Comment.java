@@ -27,7 +27,7 @@ public class Comment {
     @Column(name = "isAccepted")
     private boolean isAccepted;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
@@ -36,7 +36,7 @@ public class Comment {
     @Column(name = "attachment_id")
     private long attachmentId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "attachment_id", insertable = false, updatable = false)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude

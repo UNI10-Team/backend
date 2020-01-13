@@ -1,5 +1,6 @@
 package com.uni10.backend.security;
 
+import com.uni10.backend.entity.Role;
 import com.uni10.backend.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
 import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -22,13 +24,19 @@ import java.util.stream.Collectors;
 public class JWTUtil {
 
     public static final String ROLES = "ROLES";
+    public static final String ID = "ID";
 
     @Value("${jwt.secret}")
     private String secret;
 
     public UserInfo extractUser(final String token) {
         final Claims claims = extractAllClaims(token);
-        final User user = new User().setUsername(claims.getSubject());
+        final List<String> roles = claims.get(ROLES, List.class);
+        final long id = claims.get(ID, Long.class);
+        final User user = new User()
+                .setId(id)
+                .setRole(Role.valueOf(roles.get(0)))
+                .setUsername(claims.getSubject());
         return new UserInfo(user);
     }
 
@@ -36,16 +44,17 @@ public class JWTUtil {
         return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
     }
 
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(UserInfo userInfo) {
         final Instant now = Instant.now();
         final Instant expiration = now.plusSeconds(10 * 60 * 60);
-        val authorities = userDetails.getAuthorities()
+        val authorities = userInfo.getAuthorities()
                 .stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
         return Jwts.builder()
                 .claim(ROLES, authorities)
-                .setSubject(userDetails.getUsername())
+                .claim(ID, userInfo.getId())
+                .setSubject(userInfo.getUsername())
                 .setIssuedAt(Date.from(now))
                 .setExpiration(Date.from(expiration))
                 .signWith(SignatureAlgorithm.HS256, secret)

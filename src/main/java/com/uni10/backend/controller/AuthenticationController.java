@@ -5,6 +5,7 @@ import com.uni10.backend.api.requests.AuthenticationResponse;
 import com.uni10.backend.api.requests.RegistrationRequest;
 import com.uni10.backend.security.JWTUtil;
 import com.uni10.backend.security.SecurityService;
+import com.uni10.backend.security.UserInfo;
 import io.swagger.annotations.Api;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -37,8 +38,8 @@ public class AuthenticationController {
             throw new Exception("Incorrect credentials", ex);
         }
 
-        final UserDetails userDetails = securityService.loadUserByUsername(authenticationRequest.getUsername());
-        return ResponseEntity.ok(new AuthenticationResponse(jwtUtil.generateToken(userDetails)));
+        final UserInfo userInfo = (UserInfo) securityService.loadUserByUsername(authenticationRequest.getUsername());
+        return ResponseEntity.ok(new AuthenticationResponse(jwtUtil.generateToken(userInfo)));
     }
 
     @PostMapping("/register")

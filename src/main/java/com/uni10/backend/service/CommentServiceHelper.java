@@ -29,6 +29,7 @@ public class CommentServiceHelper {
     public void findAll(final CommentRequest commentRequest) {
         if (!securityService.isUserInRole(Role.ROLE_SUBJECT_TEACHER)) {
             commentRequest.setAccepted(true);
+            commentRequest.setUserId(securityService.getCurrentUser().getId());
         }
 
     }

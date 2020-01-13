@@ -29,7 +29,7 @@ public class CommentService {
 
     public Page<CommentDTO> findAll(final CommentRequest commentRequest) {
         final Pageable pageable = commentRequest.toPageable();
-        final Specification<Comment> specification = commentRequest.toSpecification();
+        Specification<Comment> specification = commentRequest.toSpecification();
         return commentRepository.findAll(specification, pageable).map(CommentService::commentDTO);
     }
 
@@ -55,6 +55,7 @@ public class CommentService {
         }
     }
 
+
     private static CommentDTO commentDTO(final Comment comment) {
         return new CommentDTO()
                 .setId(comment.getId())
@@ -75,6 +76,7 @@ public class CommentService {
 
     private static Comment comment(final Comment comment, final CommentDTO commentDTO) {
         return comment
+                .setAccepted(commentDTO.isAccepted())
                 .setText(commentDTO.getText());
     }
 }

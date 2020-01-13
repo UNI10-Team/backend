@@ -2,17 +2,12 @@ package com.uni10.backend.api.requests;
 
 import com.uni10.backend.api.filter.Filter;
 import com.uni10.backend.entity.Comment;
-import com.uni10.backend.entity.Course;
-import com.uni10.backend.entity.Subject;
-import com.uni10.backend.specifications.Specifications;
 import io.swagger.annotations.ApiParam;
 import lombok.Setter;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class CommentRequest  extends PagedRequest implements Filter<Comment> {
 
@@ -23,11 +18,27 @@ public class CommentRequest  extends PagedRequest implements Filter<Comment> {
     @Setter
     private boolean isAccepted;
 
+
+    @ApiParam(name = "userId")
+    @Setter
+    private long userId;
+
     @Override
     public Specification<Comment> toSpecification() {
-        Set<Specification<Comment>> specifications = new HashSet<>();
-        specifications.add(toSpecification("attachment_id", attachmentId));
-        specifications.add(toBoolSpecification("isAccepted", isAccepted));
-        return Specifications.and(specifications);
+        Specification<Comment> specification = byUsername().or(byAccepted());
+        specification = specification.and(byAttachment());
+        return specification;
+    }
+
+    private Specification<Comment> byAttachment(){
+        return toSpecification("attachmentId", attachmentId);
+    }
+
+    private Specification<Comment> byAccepted(){
+        return toBoolSpecification("isAccepted", isAccepted);
+    }
+
+    private Specification<Comment> byUsername(){
+        return toSpecification("userId", "" + userId);
     }
 }
