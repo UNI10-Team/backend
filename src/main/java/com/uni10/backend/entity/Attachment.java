@@ -25,7 +25,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Data
-@Accessors(fluent = true)
+@Accessors(chain = true)
 @Entity
 @Table(name = "attachments", catalog = "courses")
 public class Attachment {

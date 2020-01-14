@@ -61,6 +61,7 @@ public class CommentService {
                 .setId(comment.getId())
                 .setText(comment.getText())
                 .setUserId(comment.getUserId())
+                .setUsername(comment.getUser().getUsername())
                 .setAttachmentId(comment.getAttachmentId())
                 .setAccepted(comment.isAccepted());
     }

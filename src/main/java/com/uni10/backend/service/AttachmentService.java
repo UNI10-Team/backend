@@ -25,7 +25,7 @@ public class AttachmentService {
         Attachment attachment = attachment(attachmentDTO);
         attachment = attachmentRepository.save(attachment);
         //sends email to the students enrolled
-        mailService.sendNewAttachmentMail(enrollService.getAllStudent(attachment.course().getSubjectId()),"en");
+        //mailService.sendNewAttachmentMail(enrollService.getAllStudent(attachment.course().getSubjectId()),"en");
         return attachmentDTO(attachment);
     }
 
@@ -35,19 +35,19 @@ public class AttachmentService {
 
     private static AttachmentDTO attachmentDTO(final Attachment attachment){
         return new AttachmentDTO()
-                .setId(attachment.id())
-                .setData(new String(attachment.data()))
-                .setName(attachment.name())
-                .setType(attachment.type())
-                .setCourseId(attachment.courseId());
+                .setId(attachment.getId())
+                .setData(new String(attachment.getData()))
+                .setName(attachment.getName())
+                .setType(attachment.getType())
+                .setCourseId(attachment.getCourseId());
     }
 
     private static Attachment attachment(final AttachmentDTO attachmentDTO){
         return new Attachment()
-                .id(0)
-                .data(attachmentDTO.getData().getBytes())
-                .name(attachmentDTO.getName())
-                .type(attachmentDTO.getType())
-                .courseId(attachmentDTO.getCourseId());
+                .setId(0)
+                .setData(attachmentDTO.getData().getBytes())
+                .setName(attachmentDTO.getName())
+                .setType(attachmentDTO.getType())
+                .setCourseId(attachmentDTO.getCourseId());
     }
 }

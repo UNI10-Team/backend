@@ -15,6 +15,8 @@ public class CommentDTO {
 
     private long userId;
 
+    private String username;
+
     private long attachmentId;
 
     private boolean isAccepted;
