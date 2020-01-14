@@ -14,6 +14,9 @@ public class CommentRequest  extends PagedRequest implements Filter<Comment> {
     @ApiParam(name = "attachmentId")
     private List<String> attachmentId = new ArrayList<>();
 
+    @ApiParam(name = "subjectId")
+    private List<String> subjectId = new ArrayList<>();
+
     @ApiParam(name = "isAccepted")
     @Setter
     private boolean isAccepted;
@@ -27,11 +30,16 @@ public class CommentRequest  extends PagedRequest implements Filter<Comment> {
     public Specification<Comment> toSpecification() {
         Specification<Comment> specification = byUsername().or(byAccepted());
         specification = specification.and(byAttachment());
+        specification = specification.and(bySubject());
         return specification;
     }
 
     private Specification<Comment> byAttachment(){
         return toSpecification("attachmentId", attachmentId);
+    }
+
+    private Specification<Comment> bySubject(){
+        return toSpecification("attachment_course_subjectId", subjectId);
     }
 
     private Specification<Comment> byAccepted(){
