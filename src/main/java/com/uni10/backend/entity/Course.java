@@ -25,7 +25,7 @@ public class Course {
     @Column(name = "subject_id")
     private long subjectId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "subject_id", insertable = false, updatable = false)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude

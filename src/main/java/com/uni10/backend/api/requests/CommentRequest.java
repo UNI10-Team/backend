@@ -39,7 +39,9 @@ public class CommentRequest  extends PagedRequest implements Filter<Comment> {
     }
 
     private Specification<Comment> bySubject(){
-        return toSpecification("attachment_course_subjectId", subjectId);
+
+        return toSpecification("subjectId", subjectId);
+        //return toSpecification("attachment_course_subjectId", subjectId);
     }
 
     private Specification<Comment> byAccepted(){

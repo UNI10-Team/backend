@@ -13,9 +13,12 @@ import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -43,6 +46,7 @@ public class JPARunner implements CommandLineRunner {
         //userRepository.save(user);
 
         //comments();
+        //commentsAttachmentToSubject();
 
         final String ANSI_BLUE = "\u001B[34m";
         final String ANSI_RESET = "\u001B[0m";
@@ -86,5 +90,29 @@ public class JPARunner implements CommandLineRunner {
                 commentRepository.save(comment);
             }
         }
+    }
+
+    private void commentsAttachmentToSubject() {
+
+        List<Comment> comments = commentRepository.findAll();
+
+        Map<Long, Attachment> attachmentMap = new HashMap<>();
+        Map<Long, Course> courseMap = new HashMap<>();
+
+        for (Comment comment : comments) {
+            long attachmentId = comment.getAttachmentId();
+            if (!attachmentMap.containsKey(attachmentId)) {
+                attachmentMap.put(attachmentId, attachmentRepository.findById(attachmentId).get());
+            }
+
+            long courseId = attachmentMap.get(attachmentId).getCourseId();
+            if (!courseMap.containsKey(courseId)) {
+                courseMap.put(courseId, courseRepository.findById(courseId).get());
+            }
+
+            comment.setSubjectId(courseMap.get(courseId).getSubjectId()).setAttachmentId(-1);
+
+        }
+        commentRepository.saveAll(comments);
     }
 }

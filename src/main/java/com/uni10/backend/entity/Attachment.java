@@ -47,15 +47,10 @@ public class Attachment {
     @Column(name = "course_id")
     private long courseId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course_id", insertable = false, updatable = false)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Course course;
-
-    @OneToMany(mappedBy = "attachment", fetch = FetchType.LAZY)
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    private Set<Comment> comments = new HashSet<>();
 
 }

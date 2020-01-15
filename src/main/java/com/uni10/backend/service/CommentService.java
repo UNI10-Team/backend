@@ -63,6 +63,7 @@ public class CommentService {
                 .setUserId(comment.getUserId())
                 .setUsername(comment.getUser().getUsername())
                 .setAttachmentId(comment.getAttachmentId())
+                .setSubjectId(comment.getSubjectId())
                 .setAccepted(comment.isAccepted());
     }
 
@@ -72,6 +73,7 @@ public class CommentService {
                 .setText(commentDTO.getText())
                 .setUserId(commentDTO.getUserId())
                 .setAttachmentId(commentDTO.getAttachmentId())
+                .setSubjectId(commentDTO.getSubjectId())
                 .setAccepted(commentDTO.isAccepted());
     }
 

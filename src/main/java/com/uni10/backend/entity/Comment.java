@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Data
 @Entity
 @Table(name = "comments", catalog = "courses")
-@Accessors(chain=true)
+@Accessors(chain = true)
 public class Comment {
 
     @Id
@@ -36,10 +36,15 @@ public class Comment {
     @Column(name = "attachment_id")
     private long attachmentId;
 
+
+    @Column(name = "subject_id")
+    private long subjectId;
+
+    /*
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "attachment_id", insertable = false, updatable = false)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Attachment attachment;
-
+     */
 }
