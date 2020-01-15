@@ -2,12 +2,9 @@ package com.uni10.backend.service;
 
 import com.uni10.backend.api.dto.CommentDTO;
 import com.uni10.backend.api.requests.CommentRequest;
-import com.uni10.backend.entity.Comment;
 import com.uni10.backend.entity.Role;
 import com.uni10.backend.security.SecurityService;
 import lombok.AllArgsConstructor;
-import lombok.val;
-import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;

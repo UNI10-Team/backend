@@ -3,24 +3,15 @@ package com.uni10.backend.service;
 import com.uni10.backend.api.dto.CommentDTO;
 import com.uni10.backend.api.exceptions.NotFoundException;
 import com.uni10.backend.api.requests.CommentRequest;
-import com.uni10.backend.entity.Attachment;
 import com.uni10.backend.entity.Comment;
-import com.uni10.backend.entity.Subject;
-import com.uni10.backend.entity.User;
-import com.uni10.backend.repository.AttachmentRepository;
 import com.uni10.backend.repository.CommentRepository;
 import com.uni10.backend.security.SecurityService;
-import com.uni10.backend.specifications.Specifications;
 import lombok.AllArgsConstructor;
 import lombok.val;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 @Component
 @AllArgsConstructor

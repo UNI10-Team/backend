@@ -21,6 +21,6 @@ public class CommentDTO {
 
     private long subjectId;
 
-    private boolean isAccepted;
+    private boolean accepted;
 
 }
