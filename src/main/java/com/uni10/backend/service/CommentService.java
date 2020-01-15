@@ -9,6 +9,7 @@ import com.uni10.backend.entity.Subject;
 import com.uni10.backend.entity.User;
 import com.uni10.backend.repository.AttachmentRepository;
 import com.uni10.backend.repository.CommentRepository;
+import com.uni10.backend.security.SecurityService;
 import com.uni10.backend.specifications.Specifications;
 import lombok.AllArgsConstructor;
 import lombok.val;
@@ -37,7 +38,7 @@ public class CommentService {
         Comment comment = comment(commentDTO);
         comment.setAccepted(false);
         comment = commentRepository.save(comment);
-        return commentDTO(comment);
+        return commentDTO.setId(comment.getId()).setUsername(SecurityService.getCurrentUser().getUsername());
     }
 
     public CommentDTO update(final CommentDTO commentDTO, final long id) {

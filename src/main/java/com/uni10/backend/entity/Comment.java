@@ -27,7 +27,7 @@ public class Comment {
     @Column(name = "isAccepted")
     private boolean isAccepted;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude

@@ -34,6 +34,13 @@ public class CommentServiceHelper {
 
     }
 
+
+    @Before("execution(* com.uni10.backend.service.CommentService.save(..)) && args(commentDTO)")
+    public void save(final CommentDTO commentDTO) {
+        System.out.println("save");
+        commentDTO.setUserId(securityService.getCurrentUser().getId());
+    }
+
     @Async
     @AfterReturning("execution(* com.uni10.backend.service.CommentService.save(..)) && args(commentDTO)")
     public void sendNewCommentMail(final CommentDTO commentDTO) {
