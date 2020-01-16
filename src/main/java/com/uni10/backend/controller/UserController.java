@@ -22,6 +22,12 @@ public class UserController {
         return ResponseEntity.ok(userService.getCurrentUser());
     }
 
+    @PostMapping
+    @ApiOperation(value = "UserController.save", notes = "Save a new user")
+    public ResponseEntity<UserDTO> save(@Valid @RequestBody final UserDTO userDTO) {
+        return ResponseEntity.ok(userService.save(userDTO));
+    }
+
     @PutMapping("/{id}")
     @ApiOperation(value = "UserController.update", notes = "Update an existent user")
     public ResponseEntity<UserDTO> update(@Valid @RequestBody UserDTO userDTO,
