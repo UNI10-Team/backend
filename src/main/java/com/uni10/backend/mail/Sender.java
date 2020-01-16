@@ -13,6 +13,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.Instant;
+import java.util.Date;
 
 @Component
 public class Sender {
@@ -24,9 +26,7 @@ public class Sender {
         this.mailSender = mailSender;
     }
 
-
-
-    public void sendSimpleMessage(String to, String subject, String text, String ... args) {
+    public void sendSimpleMessage(String to, String subject, String text, String... args) {
         text = String.format(text, (Object[]) args);
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);

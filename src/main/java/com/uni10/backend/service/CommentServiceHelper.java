@@ -8,6 +8,7 @@ import com.uni10.backend.repository.AttachmentRepository;
 import com.uni10.backend.repository.CommentRepository;
 import com.uni10.backend.repository.CourseRepository;
 import com.uni10.backend.repository.EnrollRepository;
+import com.uni10.backend.repository.SubjectRepository;
 import com.uni10.backend.security.SecurityService;
 import lombok.AllArgsConstructor;
 import lombok.val;
@@ -31,6 +32,7 @@ public class CommentServiceHelper {
 
     private SecurityService securityService;
     private AttachmentRepository attachmentRepository;
+    private SubjectRepository subjectRepository;
     private MailService mailService;
     private CommentRepository commentRepository;
     private CourseRepository courseRepository;
@@ -48,7 +50,6 @@ public class CommentServiceHelper {
 
     @Before("execution(* com.uni10.backend.service.CommentService.save(..)) && args(commentDTO)")
     public void save(final CommentDTO commentDTO) {
-        System.out.println("save");
         if (securityService.isUserInRole(Role.ROLE_SUBJECT_TEACHER))
             commentDTO.setAccepted(true);
         else
@@ -57,23 +58,28 @@ public class CommentServiceHelper {
                 .setUsername(securityService.getCurrentUser().getUsername());
     }
 
-    @Async
-    @AfterReturning("execution(* com.uni10.backend.service.CommentService.save(..)) && args(commentDTO)")
-    public void sendNewCommentMail(final CommentDTO commentDTO) {
-        System.out.println("sendNewCommentMail");
-        long attID = commentDTO.getAttachmentId();
-        Attachment attachment = attachmentRepository.findById(attID).get();
-        Subject subject = attachment.getCourse().getSubject();
-        mailService.sendNewCommentMail(0, subject, "en");
-
-    }
-
     @Before("execution(* com.uni10.backend.service.CommentService.update(..)) && args(commentDTO, ..)")
     public void update(final CommentDTO commentDTO) {
         System.out.println("update");
         if (!securityService.isUserInRole(Role.ROLE_SUBJECT_TEACHER)) {
             commentDTO.setAccepted(false);
         }
+    }
+
+    @Async
+    @AfterReturning("execution(* com.uni10.backend.service.CommentService.save(..)) && args(commentDTO)")
+    public void sendNewCommentMail(final CommentDTO commentDTO) {
+        System.out.println("sendNewCommentMail");
+        long attachmentId = commentDTO.getAttachmentId();
+        Subject subject;
+        if (attachmentId != 0) {
+            Attachment attachment = attachmentRepository.findById(attachmentId).get();
+            subject = attachment.getCourse().getSubject();
+        } else {
+            subject = subjectRepository.findById(commentDTO.getSubjectId()).get();
+        }
+        mailService.sendNewCommentMail(0, subject, "en");
+
     }
 
     @Async

@@ -22,7 +22,12 @@ public class MailService {
 
     public void sendNewCommentMail(long messageId, Subject subject, String language) {
         User teacher = subject.getTeacher();
-        sender.sendSimpleMessage(teacher.getEmail(), "New Comment", i18NTranslationService.getTranslationMessage(1, language));
+        sender.sendSimpleMessage(teacher.getEmail(),
+                "New Comment",
+                i18NTranslationService.getTranslationMessage(1, language),
+                subject.getName(),
+                securityService.getCurrentUser().getUsername()
+        );
     }
 
     /**
