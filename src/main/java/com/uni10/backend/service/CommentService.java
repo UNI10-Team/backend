@@ -27,7 +27,6 @@ public class CommentService {
 
     public CommentDTO save(CommentDTO commentDTO) {
         Comment comment = comment(commentDTO);
-        comment.setAccepted(false);
         comment = commentRepository.save(comment);
         return commentDTO.setId(comment.getId()).setUsername(SecurityService.getCurrentUser().getUsername());
     }

@@ -35,6 +35,10 @@ public class CommentServiceHelper {
     @Before("execution(* com.uni10.backend.service.CommentService.save(..)) && args(commentDTO)")
     public void save(final CommentDTO commentDTO) {
         System.out.println("save");
+        if (securityService.isUserInRole(Role.ROLE_SUBJECT_TEACHER))
+            commentDTO.setAccepted(true);
+        else
+            commentDTO.setAccepted(false);
         commentDTO.setUserId(securityService.getCurrentUser().getId());
     }
 
