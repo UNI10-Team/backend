@@ -18,6 +18,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Sends mails after a new comment is created or
@@ -91,7 +92,7 @@ public class CommentServiceHelper {
     public void sendNewAttachmentMail(final AttachmentDTO attachmentDTO) {
         Course course = courseRepository.findById(attachmentDTO.getCourseId()).get();
         Subject subject = course.getSubject();
-        ArrayList<User> students = new ArrayList<>();
+        List<User> students = new ArrayList<>();
         for (Enroll e : enrollRepository.findAllBySubjectId(subject.getId())) {
             students.add(e.getStudent());
         }
