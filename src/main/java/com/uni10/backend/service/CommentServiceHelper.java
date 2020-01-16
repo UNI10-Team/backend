@@ -52,7 +52,8 @@ public class CommentServiceHelper {
             commentDTO.setAccepted(true);
         else
             commentDTO.setAccepted(false);
-        commentDTO.setUserId(securityService.getCurrentUser().getId());
+        commentDTO.setUserId(securityService.getCurrentUser().getId())
+                .setUsername(securityService.getCurrentUser().getUsername());
     }
 
     @Async
@@ -60,9 +61,9 @@ public class CommentServiceHelper {
     public void sendNewCommentMail(final CommentDTO commentDTO) {
         System.out.println("sendNewCommentMail");
         long attID = commentDTO.getAttachmentId();
-        Attachment attachment= attachmentRepository.findById(attID).get();
+        Attachment attachment = attachmentRepository.findById(attID).get();
         Subject subject = attachment.getCourse().getSubject();
-        mailService.sendNewCommentMail(0,subject,"en");
+        mailService.sendNewCommentMail(0, subject, "en");
 
     }
 
@@ -82,18 +83,18 @@ public class CommentServiceHelper {
         Comment comment = optional.get();
         comment.setAccepted(true);
         comment = commentRepository.save(comment);
-        mailService.sendNewAcceptMail(comment.getUser(),"en");
+        mailService.sendNewAcceptMail(comment.getUser(), "en");
     }
 
     @Async
     @AfterReturning("execution (* com.uni10.backend.service.AttachmentService.save(..)) && args(attachmentDTO)")
-    public void sendNewAttachmentMail(final AttachmentDTO attachmentDTO){
-        Course course=courseRepository.findById(attachmentDTO.getCourseId()).get();
-        Subject subject=course.getSubject();
-        ArrayList<User> students=new ArrayList<>();
-        for(Enroll e:enrollRepository.findAllBySubjectId(subject.getId())){
+    public void sendNewAttachmentMail(final AttachmentDTO attachmentDTO) {
+        Course course = courseRepository.findById(attachmentDTO.getCourseId()).get();
+        Subject subject = course.getSubject();
+        ArrayList<User> students = new ArrayList<>();
+        for (Enroll e : enrollRepository.findAllBySubjectId(subject.getId())) {
             students.add(e.getStudent());
         }
-        mailService.sendNewAttachmentMail(students,"en");
+        mailService.sendNewAttachmentMail(students, "en");
     }
 }

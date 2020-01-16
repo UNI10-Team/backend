@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 public class SecurityService implements UserDetailsService {
 
     private UserRepository userRepository;
-    private static final ThreadLocal<UserInfo> actingUser = new ThreadLocal<>();
+    private final ThreadLocal<UserInfo> actingUser = new ThreadLocal<>();
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -27,15 +27,15 @@ public class SecurityService implements UserDetailsService {
         return new UserInfo(optional.get());
     }
 
-    public static void setCurrentUser(UserInfo userInfo) {
+    public void setCurrentUser(UserInfo userInfo) {
         actingUser.set(userInfo);
     }
 
-    public static UserInfo getCurrentUser() {
+    public UserInfo getCurrentUser() {
         return actingUser.get();
     }
 
-    public static boolean isUserInRole(final Role role) {
+    public boolean isUserInRole(final Role role) {
         return actingUser.get().getRole() == role;
     }
 

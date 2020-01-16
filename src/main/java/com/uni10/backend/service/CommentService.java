@@ -28,7 +28,7 @@ public class CommentService {
     public CommentDTO save(CommentDTO commentDTO) {
         Comment comment = comment(commentDTO);
         comment = commentRepository.save(comment);
-        return commentDTO.setId(comment.getId()).setUsername(SecurityService.getCurrentUser().getUsername());
+        return commentDTO.setId(comment.getId());
     }
 
     public CommentDTO update(final CommentDTO commentDTO, final long id) {

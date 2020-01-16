@@ -9,7 +9,7 @@ import org.springframework.data.jpa.domain.Specification;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CommentRequest  extends PagedRequest implements Filter<Comment> {
+public class CommentRequest extends PagedRequest implements Filter<Comment> {
 
     @ApiParam(name = "attachmentId")
     private List<String> attachmentId = new ArrayList<>();
@@ -28,27 +28,38 @@ public class CommentRequest  extends PagedRequest implements Filter<Comment> {
 
     @Override
     public Specification<Comment> toSpecification() {
-        Specification<Comment> specification = byUsername().or(byAccepted());
-        specification = specification.and(byAttachment());
-        specification = specification.and(bySubject());
+        Specification<Comment> specification = byAttachment();
+        if (specification != null) {
+            specification = specification.and(bySubject());
+        } else {
+            specification = bySubject();
+        }
+        if (isAccepted) {
+            if (specification != null) {
+                specification = specification.and(byUsername().or(byAccepted()));
+            } else {
+
+                specification = byUsername().or(byAccepted());
+            }
+        }
         return specification;
     }
 
-    private Specification<Comment> byAttachment(){
+    private Specification<Comment> byAttachment() {
         return toSpecification("attachmentId", attachmentId);
     }
 
-    private Specification<Comment> bySubject(){
+    private Specification<Comment> bySubject() {
 
         return toSpecification("subjectId", subjectId);
         //return toSpecification("attachment_course_subjectId", subjectId);
     }
 
-    private Specification<Comment> byAccepted(){
+    private Specification<Comment> byAccepted() {
         return toBoolSpecification("isAccepted", isAccepted);
     }
 
-    private Specification<Comment> byUsername(){
+    private Specification<Comment> byUsername() {
         return toSpecification("userId", "" + userId);
     }
 }
