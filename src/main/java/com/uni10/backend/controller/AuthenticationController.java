@@ -28,6 +28,7 @@ public class AuthenticationController {
     private AuthenticationManager authenticationManager;
     private JWTUtil jwtUtil;
     private SecurityService securityService;
+    private UserService userService;
 
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
@@ -44,8 +45,8 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody RegistrationRequest registrationRequest) throws Exception {
-        //securityService.registerUser(registrationRequest);
-        return ResponseEntity.ok().build();
+        final UserInfo userInfo = new UserInfo(userService.registerUser(registrationRequest));
+        return ResponseEntity.ok(new AuthenticationResponse(jwtUtil.generateToken(userInfo)));
     }
 
 }

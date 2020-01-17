@@ -64,6 +64,27 @@ public class UserService {
                 .setLastName(userDTO.getLastName());
     }
 
+    private static User user(final RegistrationRequest request){
+        return new User(){
+            .setId(0)
+            .setUsername(request.getUsername())
+            .setEmail(request.getEmail())
+            .setPassword(bCryptPasswordEncoder.encode(request.getPassword()))
+            .setRole(Role.Role_Student)
+            .setFirstName(request.getFirstName())
+            .setLastName(request.getLastName());
+    }
+
+    public User registerUser(final RegistrationRequest request){
+        val user = userRepository.findByUsername(request.getUsername());
+        if(user != null){
+            throw new RuntimeException("An user with this username already exists!");
+        }
+        else{
+            return userRepository.save(user(request));
+        }
+    }
+
     @Autowired
     private void setBCryptPasswordEncoder(final BCryptPasswordEncoder bCryptPasswordEncoder) {
         UserService.bCryptPasswordEncoder = bCryptPasswordEncoder;
