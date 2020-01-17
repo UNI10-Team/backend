@@ -18,6 +18,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.awt.event.ActionListener;
 import java.util.Date;
@@ -47,7 +48,7 @@ public class Attachment {
     @Column(name = "course_id")
     private long courseId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course_id", insertable = false, updatable = false)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude

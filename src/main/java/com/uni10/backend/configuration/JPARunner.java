@@ -9,6 +9,9 @@ import com.uni10.backend.repository.AttachmentRepository;
 import com.uni10.backend.repository.CommentRepository;
 import com.uni10.backend.repository.CourseRepository;
 import com.uni10.backend.repository.UserRepository;
+import com.uni10.backend.security.JWTUtil;
+import com.uni10.backend.security.SecurityService;
+import com.uni10.backend.security.UserInfo;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -30,7 +33,8 @@ public class JPARunner implements CommandLineRunner {
     private AttachmentRepository attachmentRepository;
     private CourseRepository courseRepository;
     private UserRepository userRepository;
-
+    private JWTUtil jwtUtil;
+    private SecurityService securityService;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
@@ -57,6 +61,8 @@ public class JPARunner implements CommandLineRunner {
         System.out.println("Change the username and password and uncomment //userRepository.save(user);");
         System.out.println(ANSI_RESET);
         System.out.println();
+
+        System.out.println(jwtUtil.generateToken((UserInfo) securityService.loadUserByUsername("CucuietSilviu232")));
     }
 
     private void comments() {

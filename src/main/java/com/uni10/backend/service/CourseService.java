@@ -3,6 +3,7 @@ package com.uni10.backend.service;
 import com.uni10.backend.api.dto.CourseDTO;
 import com.uni10.backend.api.exceptions.NotFoundException;
 import com.uni10.backend.api.requests.CourseRequest;
+import com.uni10.backend.entity.Attachment;
 import com.uni10.backend.entity.Course;
 import com.uni10.backend.repository.CourseRepository;
 import lombok.AllArgsConstructor;
@@ -54,10 +55,16 @@ public class CourseService {
     }
 
     private static CourseDTO courseDTO(final Course course) {
+        Attachment attachment = course.getAttachment();
+        long attachmentId = 0;
+        if(attachment != null){
+            attachmentId = attachment.getId();
+        }
         return new CourseDTO()
                 .setId(course.getId())
                 .setSubjectId(course.getSubjectId())
-                .setType(course.getType());
+                .setType(course.getType())
+                .setAttachmentId(attachmentId);
     }
 
     private static Course course(final CourseDTO courseDTO) {

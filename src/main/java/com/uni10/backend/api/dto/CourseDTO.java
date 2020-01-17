@@ -14,4 +14,6 @@ public class CourseDTO {
     private String type;
 
     private long subjectId;
+
+    private long attachmentId;
 }

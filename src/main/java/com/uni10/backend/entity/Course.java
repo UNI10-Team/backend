@@ -36,8 +36,8 @@ public class Course {
     @ToString.Exclude
     private Set<Schedule> schedules = new HashSet<>();
 
-    @OneToMany(mappedBy = "course")
+    @OneToOne(mappedBy = "course", fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    private Set<Attachment> attachments = new HashSet<>();
+    private Attachment attachment;
 }

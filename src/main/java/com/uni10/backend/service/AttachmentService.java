@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @AllArgsConstructor
 public class AttachmentService {
@@ -21,7 +23,7 @@ public class AttachmentService {
         return attachmentRepository.findAll(PageRequest.of(0, 5));
     }
 
-    public AttachmentDTO save(final AttachmentDTO attachmentDTO){
+    public AttachmentDTO save(final AttachmentDTO attachmentDTO) {
         Attachment attachment = attachment(attachmentDTO);
         attachment = attachmentRepository.save(attachment);
         //sends email to the students enrolled
@@ -33,16 +35,21 @@ public class AttachmentService {
         attachmentRepository.deleteById(id);
     }
 
-    private static AttachmentDTO attachmentDTO(final Attachment attachment){
+
+    public Optional<byte[]> findById(final long id) {
+        return attachmentRepository.findById(id).map(Attachment::getData);
+    }
+
+    private static AttachmentDTO attachmentDTO(final Attachment attachment) {
         return new AttachmentDTO()
                 .setId(attachment.getId())
-                .setData(new String(attachment.getData()))
+                //.setData(new String(attachment.getData()))
                 .setName(attachment.getName())
                 .setType(attachment.getType())
                 .setCourseId(attachment.getCourseId());
     }
 
-    private static Attachment attachment(final AttachmentDTO attachmentDTO){
+    private static Attachment attachment(final AttachmentDTO attachmentDTO) {
         return new Attachment()
                 .setId(0)
                 .setData(attachmentDTO.getData().getBytes())

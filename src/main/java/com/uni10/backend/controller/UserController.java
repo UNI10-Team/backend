@@ -32,7 +32,6 @@ public class UserController {
     @ApiOperation(value = "UserController.update", notes = "Update an existent user")
     public ResponseEntity<UserDTO> update(@Valid @RequestBody UserDTO userDTO,
                                                   @PathVariable long id) {
-        //Long id1 = Long.parseLong(id);
         return ResponseEntity.ok(userService.update(userDTO,id).get());
     }
 
