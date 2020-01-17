@@ -6,16 +6,11 @@ import com.uni10.backend.entity.Attachment;
 import com.uni10.backend.service.AttachmentService;
 import io.swagger.annotations.Api;
 import lombok.AllArgsConstructor;
+import lombok.val;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -23,6 +18,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping(value = "/attachments")
 @AllArgsConstructor
+@CrossOrigin
 public class AttachmentController {
 
     private AttachmentService attachmentService;
@@ -43,8 +39,17 @@ public class AttachmentController {
     }
 
 
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_PDF_VALUE)
+    @GetMapping(value = "/{id}")
     public ResponseEntity<byte[]> findById(@PathVariable long id) {
-        return ResponseEntity.of(attachmentService.findById(id));
+
+        val attachment = attachmentService.findById(id);
+        if (attachment.isPresent()){
+            return ResponseEntity.ok()
+                    .contentType(MediaType.TEXT_PLAIN)
+                    .body(attachment.get());
+        }
+        else{
+            return ResponseEntity.notFound().build();
+        }
     }
 }
