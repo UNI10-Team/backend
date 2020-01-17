@@ -66,8 +66,8 @@ public class CommentServiceHelper {
         }
     }
 
-    @Async
-    @AfterReturning("execution(* com.uni10.backend.service.CommentService.save(..)) && args(commentDTO)")
+    //@Async
+    //@AfterReturning("execution(* com.uni10.backend.service.CommentService.save(..)) && args(commentDTO)")
     public void sendNewCommentMail(final CommentDTO commentDTO) {
         System.out.println("sendNewCommentMail");
         long attachmentId = commentDTO.getAttachmentId();
@@ -82,8 +82,8 @@ public class CommentServiceHelper {
 
     }
 
-    @Async
-    @AfterReturning("execution(* com.uni10.backend.service.CommentService.update(..)) && args(commentDTO, ..)")
+    //@Async
+    //@AfterReturning("execution(* com.uni10.backend.service.CommentService.update(..)) && args(commentDTO, ..)")
     public void sendNewAcceptMail(final CommentDTO commentDTO) {
         System.out.println("sendNewAcceptMail");
         val optional = commentRepository.findById(commentDTO.getId());
@@ -93,8 +93,8 @@ public class CommentServiceHelper {
         mailService.sendNewAcceptMail(comment.getUser(), "en");
     }
 
-    @Async
-    @AfterReturning("execution (* com.uni10.backend.service.AttachmentService.save(..)) && args(attachmentDTO)")
+    //@Async
+    //@AfterReturning("execution (* com.uni10.backend.service.AttachmentService.save(..)) && args(attachmentDTO)")
     public void sendNewAttachmentMail(final AttachmentDTO attachmentDTO) {
         Course course = courseRepository.findById(attachmentDTO.getCourseId()).get();
         Subject subject = course.getSubject();
