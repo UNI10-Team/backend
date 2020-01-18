@@ -19,4 +19,6 @@ public class AttachmentDTO {
 
     private long courseId;
 
+    private String courseType;
+
 }

@@ -1,6 +1,8 @@
 package com.uni10.backend.service;
 
 import com.uni10.backend.api.dto.UserDTO;
+import com.uni10.backend.api.requests.RegistrationRequest;
+import com.uni10.backend.entity.Role;
 import com.uni10.backend.entity.User;
 import com.uni10.backend.repository.UserRepository;
 import com.uni10.backend.security.SecurityService;
@@ -64,24 +66,27 @@ public class UserService {
                 .setLastName(userDTO.getLastName());
     }
 
-    private static User user(final RegistrationRequest request){
-        return new User(){
-            .setId(0)
-            .setUsername(request.getUsername())
-            .setEmail(request.getEmail())
-            .setPassword(bCryptPasswordEncoder.encode(request.getPassword()))
-            .setRole(Role.Role_Student)
-            .setFirstName(request.getFirstName())
-            .setLastName(request.getLastName());
+    private static User user(final RegistrationRequest request) {
+        return new User()
+                .setId(0)
+                .setUsername(request.getUsername())
+                .setEmail(request.getEmail())
+                .setPassword(bCryptPasswordEncoder.encode(request.getPassword()))
+                .setRole(Role.ROLE_STUDENT)
+                .setFirstName(request.getFirstName())
+                .setLastName(request.getLastName());
     }
 
-    public User registerUser(final RegistrationRequest request){
+    public User registerUser(final RegistrationRequest request) {
         val user = userRepository.findByUsername(request.getUsername());
-        if(user != null){
+        if (user != null) {
             throw new RuntimeException("An user with this username already exists!");
-        }
-        else{
-            return userRepository.save(user(request));
+        } else {
+            if (request.isValid()) {
+                return userRepository.save(user(request));
+            } else {
+                throw new RuntimeException("Passwords do not match");
+            }
         }
     }
 

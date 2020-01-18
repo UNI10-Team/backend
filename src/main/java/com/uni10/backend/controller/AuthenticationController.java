@@ -6,6 +6,7 @@ import com.uni10.backend.api.requests.RegistrationRequest;
 import com.uni10.backend.security.JWTUtil;
 import com.uni10.backend.security.SecurityService;
 import com.uni10.backend.security.UserInfo;
+import com.uni10.backend.service.UserService;
 import io.swagger.annotations.Api;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -44,7 +45,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody RegistrationRequest registrationRequest) throws Exception {
+    public ResponseEntity<AuthenticationResponse> register(@RequestBody RegistrationRequest registrationRequest) throws Exception {
         final UserInfo userInfo = new UserInfo(userService.registerUser(registrationRequest));
         return ResponseEntity.ok(new AuthenticationResponse(jwtUtil.generateToken(userInfo)));
     }
